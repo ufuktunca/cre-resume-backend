@@ -3,5 +3,7 @@ package main
 import "github.com/gofiber/fiber/v2"
 
 func main() {
-	_ = fiber.New()
+	app := fiber.New()
+
+	app.Listen(":8080")
 }
