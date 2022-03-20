@@ -1,6 +1,7 @@
 
 generate-mocks:
 	mockgen -destination=mocks/mock_user_service.go -source=./internal/user/service.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/service UserServiceInterface
+	mockgen -destination=mocks/mock_user_repository.go -source=./internal/user/repository.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/repository UserRepositoryInterface
 																									
 build: clean
 	@echo "Building project"

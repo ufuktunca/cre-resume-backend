@@ -1,6 +1,11 @@
 package user
 
-import "cre-resume-backend/internal/user/models"
+import (
+	"cre-resume-backend/internal/user/models"
+	"errors"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 type Service struct {
 	Repository UserRepositoryInterface
@@ -17,5 +22,17 @@ func NewUserService(userRepository UserRepositoryInterface) *Service {
 }
 
 func (s *Service) Register(register *models.User) error {
-	return nil
+	_, err := s.Repository.GetUserByEmail(register.Email)
+
+	if err == nil {
+		return errors.New("This email address already used")
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(register.Password), 14)
+	if err != nil {
+		return err
+	}
+	register.Password = string(hashedPassword)
+
+	return s.Repository.CreateUser(register)
 }
