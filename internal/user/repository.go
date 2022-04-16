@@ -2,7 +2,7 @@ package user
 
 import (
 	"context"
-	"cre-resume-backend/internal/user/models"
+	"cre-resume-backend/internal/models"
 	"log"
 	"time"
 
@@ -56,7 +56,7 @@ func (r *Respository) GetUserByEmail(email string) (*models.User, error) {
 	return user, nil
 }
 
-func (r *Respository) CreateUser(user *User) error {
+func (r *Respository) CreateUser(user *models.User) error {
 	collection := r.MongoClient.Database("cre-resume").Collection("users")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

@@ -4,7 +4,7 @@
 package mocks
 
 import (
-	models "cre-resume-backend/internal/user/models"
+	models "cre-resume-backend/internal/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

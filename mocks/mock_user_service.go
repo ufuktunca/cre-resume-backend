@@ -4,7 +4,7 @@
 package mocks
 
 import (
-	models "cre-resume-backend/internal/user/models"
+	models "cre-resume-backend/internal/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -42,4 +42,17 @@ func (_m *MockUserServiceInterface) Register(register *models.User) error {
 // Register indicates an expected call of Register
 func (_mr *MockUserServiceInterfaceMockRecorder) Register(arg0 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Register", reflect.TypeOf((*MockUserServiceInterface)(nil).Register), arg0)
+}
+
+// Login mocks base method
+func (_m *MockUserServiceInterface) Login(login *models.Login) (*string, error) {
+	ret := _m.ctrl.Call(_m, "Login", login)
+	ret0, _ := ret[0].(*string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Login indicates an expected call of Login
+func (_mr *MockUserServiceInterfaceMockRecorder) Login(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Login", reflect.TypeOf((*MockUserServiceInterface)(nil).Login), arg0)
 }
