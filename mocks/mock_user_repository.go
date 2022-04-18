@@ -56,3 +56,15 @@ func (_m *MockUserRepositoryInterface) CreateUser(user *models.User) error {
 func (_mr *MockUserRepositoryInterfaceMockRecorder) CreateUser(arg0 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "CreateUser", reflect.TypeOf((*MockUserRepositoryInterface)(nil).CreateUser), arg0)
 }
+
+// Activation mocks base method
+func (_m *MockUserRepositoryInterface) Activation(userID string) error {
+	ret := _m.ctrl.Call(_m, "Activation", userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Activation indicates an expected call of Activation
+func (_mr *MockUserRepositoryInterfaceMockRecorder) Activation(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Activation", reflect.TypeOf((*MockUserRepositoryInterface)(nil).Activation), arg0)
+}

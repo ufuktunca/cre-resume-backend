@@ -51,6 +51,27 @@ func Test_UserRegister(t *testing.T) {
 	})
 }
 
+func Test_UserAcivation(t *testing.T) {
+	t.Run("Given user When send a activation request Then should get status 200", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		mockUserService := mocks.NewMockUserServiceInterface(controller)
+
+		app := fiber.New()
+		req, _ := http.NewRequest(fiber.MethodGet, "/activation?userID=askdjasd", nil)
+		userHandler := user.NewUserHandler(mockUserService)
+		userHandler.SetupUserHandler(app)
+
+		mockUserService.
+			EXPECT().
+			ActivateUser("askdjasd").
+			Return(nil)
+
+		resp, _ := app.Test(req)
+
+		assert.Equal(t, resp.StatusCode, 200)
+	})
+}
+
 func Test_LoginHandler(t *testing.T) {
 	t.Run("Given user When send a login request Then should get status 200", func(t *testing.T) {
 		controller := gomock.NewController(t)

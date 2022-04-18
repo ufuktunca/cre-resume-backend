@@ -18,6 +18,7 @@ type Respository struct {
 type UserRepositoryInterface interface {
 	GetUserByEmail(email string) (*models.User, error)
 	CreateUser(user *models.User) error
+	Activation(userID string) error
 }
 
 func NewUserRepository(uri string) *Respository {
@@ -63,6 +64,30 @@ func (r *Respository) CreateUser(user *models.User) error {
 	defer cancel()
 
 	_, err := collection.InsertOne(ctx, user)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Respository) Activation(userID string) error {
+	collection := r.MongoClient.Database("MedicalCaseDB").Collection("Users")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"userID": userID, "userActivate": false}
+
+	_, err := collection.UpdateOne(ctx,
+		filter,
+		bson.M{
+			"$set": bson.M{
+				"userActivate": true,
+			},
+		},
+	)
 
 	if err != nil {
 		return err

@@ -56,3 +56,15 @@ func (_m *MockUserServiceInterface) Login(login *models.Login) (*string, error) 
 func (_mr *MockUserServiceInterfaceMockRecorder) Login(arg0 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Login", reflect.TypeOf((*MockUserServiceInterface)(nil).Login), arg0)
 }
+
+// ActivateUser mocks base method
+func (_m *MockUserServiceInterface) ActivateUser(userID string) error {
+	ret := _m.ctrl.Call(_m, "ActivateUser", userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ActivateUser indicates an expected call of ActivateUser
+func (_mr *MockUserServiceInterfaceMockRecorder) ActivateUser(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "ActivateUser", reflect.TypeOf((*MockUserServiceInterface)(nil).ActivateUser), arg0)
+}

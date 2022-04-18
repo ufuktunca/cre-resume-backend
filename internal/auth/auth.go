@@ -2,7 +2,7 @@ package auth
 
 import (
 	"cre-resume-backend/internal/models"
-	"fmt"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
@@ -14,17 +14,34 @@ func VerifyToken(c *fiber.Ctx) error {
 
 	claims := &models.Claims{}
 	auth := c.Cookies("auth")
-	fmt.Println(auth)
 	tkns, err := jwt.ParseWithClaims(auth, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
 	if err != nil || !tkns.Valid {
-		return err
+		c.Status(fiber.StatusUnauthorized)
+		return nil
 	}
-
-	fmt.Println(claims)
-
+	c.Request().Header.Set("user-email", claims.Username)
 	c.Next()
 
 	return nil
+}
+
+func CreateToken(email string) (*string, error) {
+
+	expirationTime := time.Now().Add(12 * time.Hour)
+	claims := models.Claims{
+		Username: email,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return &tokenString, nil
 }

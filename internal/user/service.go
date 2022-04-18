@@ -1,12 +1,12 @@
 package user
 
 import (
+	"cre-resume-backend/internal/auth"
+	"cre-resume-backend/internal/email"
 	"cre-resume-backend/internal/helpers"
 	"cre-resume-backend/internal/models"
 	"errors"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -17,6 +17,7 @@ type Service struct {
 type UserServiceInterface interface {
 	Register(register *models.User) error
 	Login(login *models.Login) (*string, error)
+	ActivateUser(userID string) error
 }
 
 func NewUserService(userRepository UserRepositoryInterface) *Service {
@@ -40,8 +41,14 @@ func (s *Service) Register(register *models.User) error {
 	}
 	register.Password = string(hashedPassword)
 	register.UserID = helpers.GenerateUUID(8)
+	register.UserActivate = false
 
-	return s.Repository.CreateUser(register)
+	err = s.Repository.CreateUser(register)
+	if err != nil {
+		return err
+	}
+
+	return email.SendMail(register.Email, models.RegistirationMailContent+"localhost:8080/verify?userID="+register.UserID)
 }
 
 func (s *Service) Login(login *models.Login) (*string, error) {
@@ -55,19 +62,15 @@ func (s *Service) Login(login *models.Login) (*string, error) {
 		return nil, errors.New("Password is not matched!!!")
 	}
 
-	expirationTime := time.Now().Add(12 * time.Hour)
-	claims := models.Claims{
-		Username: login.Email,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(jwtKey)
+	token, err := auth.CreateToken(createdUser.Email)
 	if err != nil {
 		return nil, err
 	}
 
-	return &tokenString, nil
+	return token, nil
+}
+
+func (s *Service) ActivateUser(userID string) error {
+
+	return s.Repository.Activation(userID)
 }

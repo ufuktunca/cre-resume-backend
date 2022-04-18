@@ -17,8 +17,10 @@ func NewUserHandler(userService UserServiceInterface) *User {
 }
 
 func (u *User) SetupUserHandler(app *fiber.App) {
-	app.Post("/register", u.RegisterUserHandler)
 	app.Post("/login", u.LoginUserHandler)
+	app.Post("/register", u.RegisterUserHandler)
+	app.Get("/activation", u.ActivateUserHandler)
+
 }
 
 func (u *User) RegisterUserHandler(c *fiber.Ctx) error {
@@ -57,6 +59,18 @@ func (u *User) LoginUserHandler(c *fiber.Ctx) error {
 	c.JSON(models.Auth{
 		Token: *token,
 	})
+
+	return nil
+}
+
+func (u *User) ActivateUserHandler(c *fiber.Ctx) error {
+	userID := c.Query("userID")
+
+	err := u.Service.ActivateUser(userID)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
 
 	return nil
 }

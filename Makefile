@@ -2,6 +2,9 @@
 generate-mocks:
 	mockgen -destination=mocks/mock_user_service.go -source=./internal/user/service.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/service UserServiceInterface
 	mockgen -destination=mocks/mock_user_repository.go -source=./internal/user/repository.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/repository UserRepositoryInterface
+	mockgen -destination=mocks/mock_jobPost_service.go -source=./internal/job-post/service.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/job-post/service JobPostServiceInterface
+	mockgen -destination=mocks/mock_jobPost_repository.go -source=./internal/job-post/repository.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/job-post/repository JobPostRepositoryInterface
+	mockgen -destination=mocks/mock_email.go -source=./internal/email/email.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/email/email EmailInterface
 																									
 build: clean
 	@echo "Building project"

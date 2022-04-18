@@ -17,12 +17,13 @@ func Test_Register(t *testing.T) {
 		mockUserRepository := mocks.NewMockUserRepositoryInterface(controller)
 
 		register := models.User{
-			UserID:   "123123",
-			Name:     "Ufuk",
-			Surname:  "Tunca",
-			Email:    "ufuk.tunca@gmail.com",
-			Password: "asdşfljsdaşkfjsd",
-			Type:     "Employer",
+			UserID:       "123123",
+			Name:         "Ufuk",
+			Surname:      "Tunca",
+			Email:        "uftunca72@gmail.com",
+			Password:     "asdşfljsdaşkfjsd",
+			Type:         "Employer",
+			UserActivate: false,
 		}
 
 		mockUserRepository.
@@ -50,7 +51,7 @@ func Test_Register(t *testing.T) {
 			UserID:   "123123",
 			Name:     "Ufuk",
 			Surname:  "Tunca",
-			Email:    "ufuk.tunca@gmail.com",
+			Email:    "uftunca72@gmail.com",
 			Password: "asdşfljsdaşkfjsd",
 			Type:     "Employer",
 		}
@@ -115,5 +116,22 @@ func Test_Login(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, jwtToken)
+	})
+}
+
+func Test_Activation(t *testing.T) {
+	t.Run("Given user login When sent valid data Then should change activatin ", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		mockUserRepository := mocks.NewMockUserRepositoryInterface(controller)
+
+		mockUserRepository.
+			EXPECT().
+			Activation("kasjdklasd").
+			Return(nil)
+
+		userService := user.NewUserService(mockUserRepository)
+		err := userService.ActivateUser("kasjdklasd")
+
+		assert.Nil(t, err)
 	})
 }
