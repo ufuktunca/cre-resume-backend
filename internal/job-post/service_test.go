@@ -36,3 +36,34 @@ func Test_CreateJobPost(t *testing.T) {
 		assert.Nil(t, err)
 	})
 }
+
+func Test_GetJobs(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockJobPostRepository := mocks.NewMockJobPostRepositoryInterface(controller)
+
+	t.Run("GivenUserWhenGetJobPostsThenShouldReturnJobPosts", func(t *testing.T) {
+		expectedResult := &[]models.JobPost{
+			{
+				ID:       "12",
+				Title:    "test",
+				Content:  "asdasdas",
+				Salary:   78,
+				Category: "test",
+				Location: "İstanbul",
+				Image:    "asdasdasd",
+			},
+		}
+
+		mockJobPostRepository.
+			EXPECT().
+			GetJobPosts("employee").
+			Return(expectedResult, nil)
+
+		jobPostService := jobPost.NewJobPostService(mockJobPostRepository)
+
+		result, err := jobPostService.GetJobPosts("employee")
+
+		assert.Nil(t, err)
+		assert.NotNil(t, result)
+	})
+}

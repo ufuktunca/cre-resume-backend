@@ -2,10 +2,12 @@ package jobPost_test
 
 import (
 	"bytes"
+	"cre-resume-backend/internal/auth"
 	jobPost "cre-resume-backend/internal/job-post"
 	"cre-resume-backend/internal/models"
 	"cre-resume-backend/mocks"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"testing"
@@ -31,9 +33,12 @@ func Test_CreateEmployeeJobPost(t *testing.T) {
 			Image:    "şalsdjşlasdas",
 		}
 
+		token, err := auth.CreateToken("test@asdasdas.com")
+		assert.Nil(t, err)
+
 		cookie := &http.Cookie{
 			Name:  "auth",
-			Value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVmdWt0dW5jYUBnbWFpbC5jb20iLCJleHAiOjUyNTAxODEzNjF9.7HzHor9YdC0Jbwi939cQ5W4kotbdomA_OlMLj9KVd8U",
+			Value: *token,
 		}
 
 		reqBody, err := json.Marshal(&jobPostData)
@@ -55,5 +60,57 @@ func Test_CreateEmployeeJobPost(t *testing.T) {
 		resp, _ := app.Test(req)
 
 		assert.Equal(t, resp.StatusCode, 201)
+	})
+}
+
+func Test_GetJobPosts(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockJobPostService := mocks.NewMockJobPostServiceInterface(controller)
+
+	t.Run("GivenUserWhenSentGetJobPostRequestWithEmployeeParameterThenShouldReturnJobPosts", func(t *testing.T) {
+		app := fiber.New()
+
+		token, err := auth.CreateToken("test@asdasdas.com")
+		assert.Nil(t, err)
+		cookie := &http.Cookie{
+			Name:  "auth",
+			Value: *token,
+		}
+
+		expectedResult := &[]models.JobPost{
+			{
+				ID:       "1",
+				Title:    "Tesat",
+				Content:  "asdkasidasd",
+				Salary:   400,
+				Category: "TestC",
+				Location: "İstanbul",
+				Image:    "asişdkasid",
+			},
+		}
+
+		req, err := http.NewRequest(fiber.MethodGet, "/jobPost/employee", nil)
+
+		assert.Nil(t, err)
+		req.AddCookie(cookie)
+
+		jobPostHandler := jobPost.NewJobPostHandler(mockJobPostService)
+		jobPostHandler.SetupJobPostHandler(app)
+
+		mockJobPostService.
+			EXPECT().
+			GetJobPosts("employee").
+			Return(expectedResult, nil)
+
+		resp, _ := app.Test(req)
+
+		actualResult := &[]models.JobPost{}
+		respBody, err := ioutil.ReadAll(resp.Body)
+		assert.Nil(t, err)
+		err = json.Unmarshal(respBody, actualResult)
+		assert.Nil(t, err)
+
+		assert.Equal(t, resp.StatusCode, 200)
+		assert.Equal(t, expectedResult, actualResult)
 	})
 }

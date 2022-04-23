@@ -18,6 +18,7 @@ func NewJobPostHandler(service JobPostServiceInterface) *JobPostHandler {
 func (j *JobPostHandler) SetupJobPostHandler(app *fiber.App) {
 	app.Use(auth.VerifyToken)
 	app.Post("/jobPost/:userType", j.CreateJobPost)
+	app.Get("/jobPost/:type", j.GetJobPosts)
 
 }
 
@@ -38,5 +39,18 @@ func (j *JobPostHandler) CreateJobPost(c *fiber.Ctx) error {
 
 	c.JSON(jobPostData)
 	c.Status(fiber.StatusCreated)
+	return nil
+}
+
+func (j *JobPostHandler) GetJobPosts(c *fiber.Ctx) error {
+	jobPostType := c.Params("type")
+
+	jobPosts, err := j.Service.GetJobPosts(jobPostType)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
+	c.JSON(jobPosts)
 	return nil
 }
