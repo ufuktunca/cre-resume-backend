@@ -11,7 +11,7 @@ type JobPostService struct {
 
 type JobPostServiceInterface interface {
 	CreateJobPost(jobPost *models.JobPost) (*models.JobPost, error)
-	GetJobPosts(jobPostType string) (*[]models.JobPost, error)
+	GetJobPosts(jobPostType, category, from, to string) (*[]models.JobPost, error)
 }
 
 func NewJobPostService(repository JobPostRepositoryInterface) *JobPostService {
@@ -31,6 +31,6 @@ func (s *JobPostService) CreateJobPost(jobPost *models.JobPost) (*models.JobPost
 	return jobPost, nil
 }
 
-func (s *JobPostService) GetJobPosts(jobPostType string) (*[]models.JobPost, error) {
-	return s.Repository.GetJobPosts(jobPostType)
+func (s *JobPostService) GetJobPosts(jobPostType, category, from, to string) (*[]models.JobPost, error) {
+	return s.Repository.GetJobPosts(jobPostType, category, from, to)
 }

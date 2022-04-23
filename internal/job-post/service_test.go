@@ -48,8 +48,8 @@ func Test_GetJobs(t *testing.T) {
 				ID:       "12",
 				Title:    "test",
 				Content:  "asdasdas",
-				Salary:   78,
-				Category: "test",
+				Salary:   4500,
+				Category: "Developer",
 				Location: "İstanbul",
 				Image:    "asdasdasd",
 				Type:     "employee",
@@ -58,12 +58,12 @@ func Test_GetJobs(t *testing.T) {
 
 		mockJobPostRepository.
 			EXPECT().
-			GetJobPosts("employee").
+			GetJobPosts("employee", "Developer", "3000", "5000").
 			Return(expectedResult, nil)
 
 		jobPostService := jobPost.NewJobPostService(mockJobPostRepository)
 
-		result, err := jobPostService.GetJobPosts("employee")
+		result, err := jobPostService.GetJobPosts("employee", "Developer", "3000", "5000")
 
 		assert.Nil(t, err)
 		assert.NotNil(t, result)

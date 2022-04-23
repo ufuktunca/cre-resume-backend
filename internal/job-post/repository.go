@@ -3,7 +3,9 @@ package jobPost
 import (
 	"context"
 	"cre-resume-backend/internal/models"
+	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,7 +19,7 @@ type JobPostRepository struct {
 
 type JobPostRepositoryInterface interface {
 	CreateJobPost(jobPost *models.JobPost) error
-	GetJobPosts(jobPostType string) (*[]models.JobPost, error)
+	GetJobPosts(jobPostType, category, from, to string) (*[]models.JobPost, error)
 }
 
 func CreateJobPostRepository(uri string) *JobPostRepository {
@@ -49,15 +51,33 @@ func (r *JobPostRepository) CreateJobPost(jobPost *models.JobPost) error {
 	return nil
 }
 
-func (r *JobPostRepository) GetJobPosts(jobPostType string) (*[]models.JobPost, error) {
+func (r *JobPostRepository) GetJobPosts(jobPostType, category, from, to string) (*[]models.JobPost, error) {
 	collection := r.MongoClient.Database("cre-resume").Collection("jobPosts")
-
+	fmt.Println(jobPostType, category, from, to)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	filters := bson.M{"type": jobPostType}
+	typeFilter := bson.M{"type": jobPostType}
+	categoryFilter := bson.M{}
+	saleFilter := bson.M{}
 
-	cur, err := collection.Find(ctx, filters)
+	if category != "" {
+		categoryFilter = bson.M{"category": category}
+	}
+
+	if from != "" && to != "" {
+		fromInt, _ := strconv.Atoi(from)
+		toInt, _ := strconv.Atoi(to)
+		saleFilter = bson.M{"salary": bson.M{"$gte": fromInt, "$lte": toInt}}
+	}
+
+	cur, err := collection.Find(ctx, bson.M{
+		"$and": []bson.M{
+			typeFilter,
+			categoryFilter,
+			saleFilter,
+		},
+	})
 
 	jobPosts := []models.JobPost{}
 	for cur.Next(ctx) {
