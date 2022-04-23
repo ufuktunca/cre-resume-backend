@@ -14,8 +14,15 @@ func Test_CreateJobPost(t *testing.T) {
 	t.Run("Given employee user When sent a create job post request Then should return job post data", func(t *testing.T) {
 		controller := gomock.NewController(t)
 		mockJobPostRepository := mocks.NewMockJobPostRepositoryInterface(controller)
+		mockUserRepository := mocks.NewMockUserRepositoryInterface(controller)
+
+		testUser := &models.User{
+			UserID: "dşasljşkas",
+			Email:  "test@gmail.com",
+		}
 
 		jobPostData := models.JobPost{
+			OwnerID:  testUser.UserID,
 			Title:    "test",
 			Content:  "test cont",
 			Salary:   123213,
@@ -25,13 +32,18 @@ func Test_CreateJobPost(t *testing.T) {
 			Type:     "employer",
 		}
 
+		mockUserRepository.
+			EXPECT().
+			GetUserByEmail("test@gmail.com").
+			Return(testUser, nil)
+
 		mockJobPostRepository.
 			EXPECT().
 			CreateJobPost(gomock.Any()).
 			Return(nil)
 
-		jobPostService := jobPost.NewJobPostService(mockJobPostRepository)
-		jobPostData2, err := jobPostService.CreateJobPost(&jobPostData)
+		jobPostService := jobPost.NewJobPostService(mockJobPostRepository, mockUserRepository)
+		jobPostData2, err := jobPostService.CreateJobPost(&jobPostData, "test@gmail.com")
 
 		assert.NotNil(t, jobPostData2)
 		assert.Nil(t, err)
@@ -41,6 +53,7 @@ func Test_CreateJobPost(t *testing.T) {
 func Test_GetJobs(t *testing.T) {
 	controller := gomock.NewController(t)
 	mockJobPostRepository := mocks.NewMockJobPostRepositoryInterface(controller)
+	mockUserRepository := mocks.NewMockUserRepositoryInterface(controller)
 
 	t.Run("GivenUserWhenGetJobPostsThenShouldReturnJobPosts", func(t *testing.T) {
 		expectedResult := &[]models.JobPost{
@@ -61,7 +74,7 @@ func Test_GetJobs(t *testing.T) {
 			GetJobPosts("employee", "Developer", "3000", "5000", "salary").
 			Return(expectedResult, nil)
 
-		jobPostService := jobPost.NewJobPostService(mockJobPostRepository)
+		jobPostService := jobPost.NewJobPostService(mockJobPostRepository, mockUserRepository)
 
 		result, err := jobPostService.GetJobPosts("employee", "Developer", "3000", "5000", "salary")
 

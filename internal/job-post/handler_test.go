@@ -55,7 +55,7 @@ func Test_CreateEmployeeJobPost(t *testing.T) {
 
 		mockJobPostService.
 			EXPECT().
-			CreateJobPost(&jobPostData).
+			CreateJobPost(&jobPostData, "test@asdasdas.com").
 			Return(nil, nil)
 
 		resp, _ := app.Test(req)
@@ -113,5 +113,37 @@ func Test_GetJobPosts(t *testing.T) {
 
 		assert.Equal(t, resp.StatusCode, 200)
 		assert.Equal(t, expectedResult, actualResult)
+	})
+}
+
+func Test_ApplyJob(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockJobPostService := mocks.NewMockJobPostServiceInterface(controller)
+
+	t.Run("GivenUserWhenSentGetJobPostRequestWithEmployeeParameterThenShouldReturnJobPosts", func(t *testing.T) {
+		app := fiber.New()
+
+		token, err := auth.CreateToken("test@asdasdas.com")
+		assert.Nil(t, err)
+		cookie := &http.Cookie{
+			Name:  "auth",
+			Value: *token,
+		}
+
+		req, err := http.NewRequest(fiber.MethodGet, "/jobPost/2938479/apply", nil)
+
+		assert.Nil(t, err)
+		req.AddCookie(cookie)
+
+		jobPostHandler := jobPost.NewJobPostHandler(mockJobPostService)
+		jobPostHandler.SetupJobPostHandler(app)
+
+		// mockJobPostService.
+		// 	EXPECT().
+		// 	GetJobPosts("employee", "Developer", "3000", "5000", "salary").
+		// 	Return(expectedResult, nil)
+
+		resp, _ := app.Test(req)
+		assert.Equal(t, resp.StatusCode, 200)
 	})
 }

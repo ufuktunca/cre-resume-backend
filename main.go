@@ -15,7 +15,7 @@ func main() {
 	userController := user.NewUserHandler(userService)
 
 	jobPostRepository := jobPost.CreateJobPostRepository("mongodb://localhost:27017")
-	jobPostService := jobPost.NewJobPostService(jobPostRepository)
+	jobPostService := jobPost.NewJobPostService(jobPostRepository, userRepository)
 	jobPostHandler := jobPost.NewJobPostHandler(jobPostService)
 
 	userController.SetupUserHandler(app)

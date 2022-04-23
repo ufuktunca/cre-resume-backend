@@ -32,6 +32,7 @@ type Auth struct {
 
 type JobPost struct {
 	ID        string    `json:"id" bson:"id"`
+	OwnerID   string    `json:"ownerId" bson:"ownerId"`
 	Title     string    `json:"title" bson:"title"`
 	Company   string    `json:"company" bson:"company"`
 	Content   string    `json:"content" bson:"content"`
