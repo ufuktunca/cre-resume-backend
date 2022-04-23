@@ -34,6 +34,7 @@ type JobPost struct {
 	Category string `json:"category" bson:"category"`
 	Location string `json:"location" bson:"location"`
 	Image    string `json:"image" bson:"image"`
+	Type     string `json:"type" bson:"type"`
 }
 
 var RegistirationMailContent = "You have successfully registered to Cre-Resume please click this link for activation.\n "

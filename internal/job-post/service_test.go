@@ -22,6 +22,7 @@ func Test_CreateJobPost(t *testing.T) {
 			Category: "DEv",
 			Location: "İstanbul",
 			Image:    "lasşdkjşjasdşkasdj",
+			Type:     "employer",
 		}
 
 		mockJobPostRepository.
@@ -51,6 +52,7 @@ func Test_GetJobs(t *testing.T) {
 				Category: "test",
 				Location: "İstanbul",
 				Image:    "asdasdasd",
+				Type:     "employee",
 			},
 		}
 

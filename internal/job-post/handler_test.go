@@ -31,6 +31,7 @@ func Test_CreateEmployeeJobPost(t *testing.T) {
 			Category: "Developer",
 			Location: "İstanbul",
 			Image:    "şalsdjşlasdas",
+			Type:     "employee",
 		}
 
 		token, err := auth.CreateToken("test@asdasdas.com")
