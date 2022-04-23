@@ -19,7 +19,7 @@ type JobPostRepository struct {
 
 type JobPostRepositoryInterface interface {
 	CreateJobPost(jobPost *models.JobPost) error
-	GetJobPosts(jobPostType, category, from, to string) (*[]models.JobPost, error)
+	GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error)
 }
 
 func CreateJobPostRepository(uri string) *JobPostRepository {
@@ -51,7 +51,7 @@ func (r *JobPostRepository) CreateJobPost(jobPost *models.JobPost) error {
 	return nil
 }
 
-func (r *JobPostRepository) GetJobPosts(jobPostType, category, from, to string) (*[]models.JobPost, error) {
+func (r *JobPostRepository) GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error) {
 	collection := r.MongoClient.Database("cre-resume").Collection("jobPosts")
 	fmt.Println(jobPostType, category, from, to)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -71,13 +71,26 @@ func (r *JobPostRepository) GetJobPosts(jobPostType, category, from, to string) 
 		saleFilter = bson.M{"salary": bson.M{"$gte": fromInt, "$lte": toInt}}
 	}
 
+	options := options.Find()
+
+	switch sort {
+	case "location":
+		options.SetSort(bson.M{"location": 1})
+	case "salary":
+		options.SetSort(bson.M{"salary": -1})
+	case "company":
+		options.SetSort(bson.M{"company": 1})
+	default:
+		options.SetSort(bson.M{"createdAt": -1})
+	}
+
 	cur, err := collection.Find(ctx, bson.M{
 		"$and": []bson.M{
 			typeFilter,
 			categoryFilter,
 			saleFilter,
 		},
-	})
+	}, options)
 
 	jobPosts := []models.JobPost{}
 	for cur.Next(ctx) {

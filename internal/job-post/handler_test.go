@@ -90,7 +90,7 @@ func Test_GetJobPosts(t *testing.T) {
 			},
 		}
 
-		req, err := http.NewRequest(fiber.MethodGet, "/jobPost/employee?category=Developer&from=3000&to=5000", nil)
+		req, err := http.NewRequest(fiber.MethodGet, "/jobPost/employee?category=Developer&from=3000&to=5000&sort=salary", nil)
 
 		assert.Nil(t, err)
 		req.AddCookie(cookie)
@@ -100,7 +100,7 @@ func Test_GetJobPosts(t *testing.T) {
 
 		mockJobPostService.
 			EXPECT().
-			GetJobPosts("employee", "Developer", "3000", "5000").
+			GetJobPosts("employee", "Developer", "3000", "5000", "salary").
 			Return(expectedResult, nil)
 
 		resp, _ := app.Test(req)

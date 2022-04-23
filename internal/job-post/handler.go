@@ -47,8 +47,9 @@ func (j *JobPostHandler) GetJobPosts(c *fiber.Ctx) error {
 	category := c.Query("category", "")
 	from := c.Query("from", "")
 	to := c.Query("to", "")
+	sort := c.Query("sort", "")
 
-	jobPosts, err := j.Service.GetJobPosts(jobPostType, category, from, to)
+	jobPosts, err := j.Service.GetJobPosts(jobPostType, category, from, to, sort)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
