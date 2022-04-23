@@ -57,3 +57,15 @@ func (_m *MockJobPostServiceInterface) GetJobPosts(jobPostType string, category 
 func (_mr *MockJobPostServiceInterfaceMockRecorder) GetJobPosts(arg0, arg1, arg2, arg3, arg4 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetJobPosts", reflect.TypeOf((*MockJobPostServiceInterface)(nil).GetJobPosts), arg0, arg1, arg2, arg3, arg4)
 }
+
+// ApplyJobPost mocks base method
+func (_m *MockJobPostServiceInterface) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEmail string, jobID string) error {
+	ret := _m.ctrl.Call(_m, "ApplyJobPost", jobPostDTO, applierEmail, jobID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ApplyJobPost indicates an expected call of ApplyJobPost
+func (_mr *MockJobPostServiceInterfaceMockRecorder) ApplyJobPost(arg0, arg1, arg2 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "ApplyJobPost", reflect.TypeOf((*MockJobPostServiceInterface)(nil).ApplyJobPost), arg0, arg1, arg2)
+}

@@ -116,7 +116,7 @@ func Test_GetJobPosts(t *testing.T) {
 	})
 }
 
-func Test_ApplyJob(t *testing.T) {
+func Test_ApplyJobHandler(t *testing.T) {
 	controller := gomock.NewController(t)
 	mockJobPostService := mocks.NewMockJobPostServiceInterface(controller)
 
@@ -130,20 +130,28 @@ func Test_ApplyJob(t *testing.T) {
 			Value: *token,
 		}
 
-		req, err := http.NewRequest(fiber.MethodGet, "/jobPost/2938479/apply", nil)
-
+		applyJobDTO := models.ApplyJobPostDTO{
+			CVID: "askdjkas",
+		}
+		reqBody, err := json.Marshal(&applyJobDTO)
 		assert.Nil(t, err)
+
+		req, err := http.NewRequest(fiber.MethodPost, "/jobPost/2938479/apply", bytes.NewReader(reqBody))
+		assert.Nil(t, err)
+		req.Header.Add("Content-Type", "application/json")
+		req.Header.Set("Content-Length", strconv.Itoa(len(reqBody)))
 		req.AddCookie(cookie)
 
 		jobPostHandler := jobPost.NewJobPostHandler(mockJobPostService)
 		jobPostHandler.SetupJobPostHandler(app)
 
-		// mockJobPostService.
-		// 	EXPECT().
-		// 	GetJobPosts("employee", "Developer", "3000", "5000", "salary").
-		// 	Return(expectedResult, nil)
+		mockJobPostService.
+			EXPECT().
+			ApplyJobPost(&applyJobDTO, "test@asdasdas.com", "2938479").
+			Return(nil)
 
-		resp, _ := app.Test(req)
+		resp, err := app.Test(req)
+		assert.Nil(t, err)
 		assert.Equal(t, resp.StatusCode, 200)
 	})
 }

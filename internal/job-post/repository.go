@@ -20,6 +20,8 @@ type JobPostRepository struct {
 type JobPostRepositoryInterface interface {
 	CreateJobPost(jobPost *models.JobPost) error
 	GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error)
+	GetJobPostByID(id string) (*models.JobPost, error)
+	CreateApplyJobPost(applyJobPost *models.ApplyJobPost) error
 }
 
 func CreateJobPostRepository(uri string) *JobPostRepository {
@@ -49,6 +51,42 @@ func (r *JobPostRepository) CreateJobPost(jobPost *models.JobPost) error {
 	}
 
 	return nil
+}
+
+func (r *JobPostRepository) CreateApplyJobPost(applyJobPost *models.ApplyJobPost) error {
+	collection := r.MongoClient.Database("cre-resume").Collection("apply-jobPost")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	_, err := collection.InsertOne(ctx, applyJobPost)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *JobPostRepository) GetJobPostByID(id string) (*models.JobPost, error) {
+	collection := r.MongoClient.Database("cre-resume").Collection("jobPosts")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	dbResult := collection.FindOne(ctx, bson.M{"id": id})
+
+	if dbResult.Err() != nil {
+		return nil, dbResult.Err()
+	}
+
+	jobPost := &models.JobPost{}
+	err := dbResult.Decode(&jobPost)
+
+	if err != nil {
+		return nil, err
+	}
+	return jobPost, nil
 }
 
 func (r *JobPostRepository) GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error) {

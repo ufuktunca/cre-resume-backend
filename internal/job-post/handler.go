@@ -19,7 +19,7 @@ func (j *JobPostHandler) SetupJobPostHandler(app *fiber.App) {
 	app.Use(auth.VerifyToken)
 	app.Post("/jobPost/:userType", j.CreateJobPost)
 	app.Get("/jobPost/:type", j.GetJobPosts)
-	app.Get("/jobPost/:jobId/apply", j.ApplyJobHandler)
+	app.Post("/jobPost/:jobId/apply", j.ApplyJobHandler)
 
 }
 
@@ -66,5 +66,21 @@ func (j *JobPostHandler) GetJobPosts(c *fiber.Ctx) error {
 }
 
 func (j *JobPostHandler) ApplyJobHandler(c *fiber.Ctx) error {
+	ownerEmail := c.Get("user-email", "")
+	jobID := c.Params("jobId")
+
+	applyJobDTO := models.ApplyJobPostDTO{}
+	err := c.BodyParser(&applyJobDTO)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
+	err = j.Service.ApplyJobPost(&applyJobDTO, ownerEmail, jobID)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
 	return nil
 }

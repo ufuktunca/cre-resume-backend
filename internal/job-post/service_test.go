@@ -82,3 +82,46 @@ func Test_GetJobs(t *testing.T) {
 		assert.NotNil(t, result)
 	})
 }
+
+func Test_ApplyJob(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockJobPostRepository := mocks.NewMockJobPostRepositoryInterface(controller)
+	mockUserRepository := mocks.NewMockUserRepositoryInterface(controller)
+
+	t.Run("GivenUserWhenApplyJobThenShouldReturnNoError", func(t *testing.T) {
+		jobPostData := models.JobPost{
+			ID:      "293849238",
+			OwnerID: "234",
+		}
+
+		applyJobDTO := models.ApplyJobPostDTO{
+			CVID: "askdjkas",
+		}
+
+		testUser := models.User{
+			UserID: "234u23423",
+			Email:  "test@gmail.com",
+		}
+
+		mockUserRepository.
+			EXPECT().
+			GetUserByEmail("test@gmail.com").
+			Return(&testUser, nil)
+
+		mockJobPostRepository.
+			EXPECT().
+			GetJobPostByID("23874289374").
+			Return(&jobPostData, nil)
+
+		mockJobPostRepository.
+			EXPECT().
+			CreateApplyJobPost(gomock.Any()).
+			Return(nil)
+
+		jobPostService := jobPost.NewJobPostService(mockJobPostRepository, mockUserRepository)
+
+		err := jobPostService.ApplyJobPost(&applyJobDTO, "test@gmail.com", "23874289374")
+
+		assert.Nil(t, err)
+	})
+}

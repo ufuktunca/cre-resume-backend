@@ -15,6 +15,7 @@ type JobPostService struct {
 type JobPostServiceInterface interface {
 	CreateJobPost(jobPost *models.JobPost, ownerEmail string) (*models.JobPost, error)
 	GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error)
+	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEmail, jobID string) error
 }
 
 func NewJobPostService(repository JobPostRepositoryInterface, userRepository user.UserRepositoryInterface) *JobPostService {
@@ -46,4 +47,26 @@ func (s *JobPostService) CreateJobPost(jobPost *models.JobPost, ownerEmail strin
 
 func (s *JobPostService) GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error) {
 	return s.Repository.GetJobPosts(jobPostType, category, from, to, sort)
+}
+
+func (s *JobPostService) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEmail, jobID string) error {
+	applierUser, err := s.UserRepository.GetUserByEmail(applierEmail)
+	if err != nil {
+		return err
+	}
+
+	jobPost, err := s.Repository.GetJobPostByID(jobID)
+	if err != nil {
+		return err
+	}
+
+	applyJobPost := &models.ApplyJobPost{
+		ID:          helpers.GenerateUUID(8),
+		JobPostID:   jobPost.ID,
+		CVID:        jobPostDTO.CVID,
+		ApplierID:   applierUser.UserID,
+		PostOwnerID: jobPost.OwnerID,
+	}
+
+	return s.Repository.CreateApplyJobPost(applyJobPost)
 }
