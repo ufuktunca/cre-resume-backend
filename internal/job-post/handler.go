@@ -20,6 +20,7 @@ func (j *JobPostHandler) SetupJobPostHandler(app *fiber.App) {
 	app.Post("/jobPost/:userType", j.CreateJobPost)
 	app.Get("/jobPost/:type", j.GetJobPosts)
 	app.Post("/jobPost/:jobId/apply", j.ApplyJobHandler)
+	app.Get("/user/jobPost/:type", j.GetUserJobPosts)
 
 }
 
@@ -82,5 +83,19 @@ func (j *JobPostHandler) ApplyJobHandler(c *fiber.Ctx) error {
 		return nil
 	}
 
+	return nil
+}
+
+func (j *JobPostHandler) GetUserJobPosts(c *fiber.Ctx) error {
+	postType := c.Params("type")
+	userEmail := c.Get("user-email", "")
+
+	jobPosts, err := j.Service.GetUserJobPosts(userEmail, postType)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
+	c.JSON(jobPosts)
 	return nil
 }

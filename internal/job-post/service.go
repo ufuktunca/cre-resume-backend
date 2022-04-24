@@ -16,6 +16,7 @@ type JobPostServiceInterface interface {
 	CreateJobPost(jobPost *models.JobPost, ownerEmail string) (*models.JobPost, error)
 	GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error)
 	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEmail, jobID string) error
+	GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error)
 }
 
 func NewJobPostService(repository JobPostRepositoryInterface, userRepository user.UserRepositoryInterface) *JobPostService {
@@ -69,4 +70,13 @@ func (s *JobPostService) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applie
 	}
 
 	return s.Repository.CreateApplyJobPost(applyJobPost)
+}
+
+func (s *JobPostService) GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error) {
+	user, err := s.UserRepository.GetUserByEmail(userEmail)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.Repository.GetJobPostsWithUserID(user.UserID, postType)
 }

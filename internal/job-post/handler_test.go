@@ -155,3 +155,54 @@ func Test_ApplyJobHandler(t *testing.T) {
 		assert.Equal(t, resp.StatusCode, 200)
 	})
 }
+
+func Test_GetUsersJobPostsHanlder(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockJobPostService := mocks.NewMockJobPostServiceInterface(controller)
+
+	t.Run("GivenUserWhenSentGetJobPostRequestWithEmployeeParameterThenShouldReturnJobPostOnlyUserJobPosts", func(t *testing.T) {
+		app := fiber.New()
+
+		token, err := auth.CreateToken("test@asdasdas.com")
+		assert.Nil(t, err)
+		cookie := &http.Cookie{
+			Name:  "auth",
+			Value: *token,
+		}
+
+		expectedResult := &[]models.JobPost{
+			{
+				ID:       "1",
+				Title:    "Tesat",
+				Content:  "asdkasidasd",
+				Salary:   4000,
+				Category: "TestC",
+				Location: "İstanbul",
+				Image:    "asişdkasid",
+			},
+		}
+
+		req, err := http.NewRequest(fiber.MethodGet, "/user/jobPost/employee", nil)
+
+		assert.Nil(t, err)
+		req.AddCookie(cookie)
+
+		jobPostHandler := jobPost.NewJobPostHandler(mockJobPostService)
+		jobPostHandler.SetupJobPostHandler(app)
+
+		mockJobPostService.
+			EXPECT().
+			GetUserJobPosts("test@asdasdas.com", "employee").
+			Return(expectedResult, nil)
+
+		resp, _ := app.Test(req)
+
+		actualResult := &[]models.JobPost{}
+		respBody, err := ioutil.ReadAll(resp.Body)
+		assert.Nil(t, err)
+		err = json.Unmarshal(respBody, &actualResult)
+		assert.Nil(t, err)
+
+		assert.Equal(t, resp.StatusCode, 200)
+	})
+}
