@@ -25,7 +25,7 @@ type JobPostRepositoryInterface interface {
 	GetJobPostsWithUserID(id string, postType string) (*[]models.JobPost, error)
 }
 
-func CreateJobPostRepository(uri string) *JobPostRepository {
+func NewJobRepository(uri string) *JobPostRepository {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 
