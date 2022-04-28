@@ -120,34 +120,87 @@ func CreateCV(cvData *models.CV) {
 	}
 
 	pdf.SetX(20)
-	pdf.SetY(220)
+	pdf.SetY(pdf.GetY() + 25)
 	pdf.Cell(nil, "Phone")
 
 	pdf.SetFont("wts11", "", 14)
 
-	pdf.SetY(235)
+	pdf.SetY(pdf.GetY() + 15)
 	pdf.SetX(20)
 	pdf.Cell(nil, cvData.PhoneNumber)
 
 	pdf.SetFont("robotoBold", "", 14)
 	pdf.SetX(20)
-	pdf.SetY(255)
+	pdf.SetY(pdf.GetY() + 20)
 	pdf.Cell(nil, "E-mail")
 
 	pdf.SetFont("wts11", "", 14)
-	pdf.SetY(270)
+	pdf.SetY(pdf.GetY() + 15)
 	pdf.SetX(20)
 	pdf.Cell(nil, cvData.Email)
 
 	pdf.SetFont("robotoBold", "", 14)
 	pdf.SetX(20)
-	pdf.SetY(290)
+	pdf.SetY(pdf.GetY() + 20)
 	pdf.Cell(nil, "Github")
 
 	pdf.SetFont("wts11", "", 14)
-	pdf.SetY(305)
+	pdf.SetY(pdf.GetY() + 15)
 	pdf.SetX(20)
 	pdf.Cell(nil, cvData.Github)
+
+	pdf.SetFont("robotoBold", "", 14)
+	pdf.SetX(20)
+	pdf.SetY(pdf.GetY() + 20)
+	pdf.Cell(nil, "Linkedin")
+
+	pdf.SetFont("wts11", "", 14)
+	pdf.SetY(pdf.GetY() + 15)
+	pdf.SetX(20)
+	pdf.Cell(nil, cvData.Linkedin)
+
+	pdf.SetFont("robotoBold", "", 14)
+	pdf.SetX(20)
+	pdf.SetY(pdf.GetY() + 20)
+	pdf.Cell(nil, "Other Links")
+
+	pdf.SetFont("wts11", "", 14)
+
+	for _, link := range cvData.OtherSM {
+		pdf.SetY(pdf.GetY() + 15)
+		pdf.SetX(20)
+		pdf.Cell(nil, link)
+	}
+
+	pdf.SetFont("robotoBold", "", 16)
+	pdf.SetX(20)
+	pdf.SetY(pdf.GetY() + 25)
+	pdf.Cell(nil, "Hobbies")
+
+	pdf.SetFillColor(200, 200, 200)
+	pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
+
+	pdf.SetFont("wts11", "", 14)
+	for _, hobby := range cvData.Hobbies {
+		pdf.SetX(20)
+		pdf.SetY(pdf.GetY() + 20)
+		pdf.Cell(nil, hobby)
+	}
+
+	pdf.SetFont("robotoBold", "", 16)
+	pdf.SetX(20)
+	pdf.SetY(pdf.GetY() + 25)
+	pdf.Cell(nil, "Languages")
+
+	pdf.SetFillColor(200, 200, 200)
+	pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
+
+	pdf.SetFont("wts11", "", 14)
+	for _, language := range cvData.Languages {
+		pdf.SetX(20)
+		pdf.SetY(pdf.GetY() + 20)
+		pdf.Cell(nil, language.Language+" - "+language.Level)
+	}
 
 	err = pdf.WritePdf("./test.pdf")
 	if err != nil {
