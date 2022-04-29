@@ -257,6 +257,60 @@ func CreateCV(cvData *models.CV) {
 		pdf.SetY(pdf.GetY() + 15)
 	}
 
+	pdf.SetTextColor(31, 31, 31)
+	pdf.SetFont("robotoBold", "", 25)
+	pdf.SetX(250)
+	pdf.SetY(pdf.GetY() + 27)
+	pdf.Cell(nil, "Experience")
+
+	pdf.SetFillColor(31, 31, 31)
+	pdf.SetY(pdf.GetY() + 27)
+	pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+
+	for _, experience := range cvData.Experience {
+		pdf.SetTextColor(145, 145, 145)
+		pdf.SetX(250)
+		pdf.SetY(pdf.GetY() + 15)
+
+		pdf.SetFont("robotoBold", "", 17)
+		pdf.Cell(nil, experience.StartDate)
+
+		pdf.SetTextColor(31, 31, 31)
+		pdf.SetX(pdf.GetX() + 15)
+		universityStartX := pdf.GetX()
+		pdf.Cell(nil, experience.Company)
+
+		pdf.SetTextColor(145, 145, 145)
+		pdf.Br(20)
+		pdf.SetX(250)
+		pdf.Cell(nil, experience.EndDate)
+
+		pdf.SetTextColor(31, 31, 31)
+		pdf.SetX(universityStartX)
+		pdf.Cell(nil, experience.Title)
+
+		splittedDescription, _ := pdf.SplitText(experience.Description, 500)
+		pdf.SetFont("wts11", "", 17)
+		pdf.SetY(pdf.GetY() + 10)
+		for _, descriptionLine := range splittedDescription {
+			pdf.Br(17)
+			pdf.SetX(250)
+			pdf.Cell(nil, descriptionLine)
+		}
+
+		pdf.SetY(pdf.GetY() + 15)
+	}
+
+	pdf.SetTextColor(31, 31, 31)
+	pdf.SetFont("robotoBold", "", 25)
+	pdf.SetX(250)
+	pdf.SetY(pdf.GetY() + 27)
+	pdf.Cell(nil, "Skills")
+
+	pdf.SetFillColor(31, 31, 31)
+	pdf.SetY(pdf.GetY() + 27)
+	pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+
 	err = pdf.WritePdf("./test.pdf")
 	if err != nil {
 		fmt.Println(err)
