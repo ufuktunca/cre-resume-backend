@@ -47,25 +47,30 @@ type JobPost struct {
 }
 
 type CV struct {
-	ID             string     `json:"id" bson:"id"`
-	OwnerID        string     `json:"ownerId" bson:"ownerId"`
-	CVName         string     `json:"cvName" bson:"cvName"`
-	NameSurname    string     `json:"nameSurname" bson:"nameSurname"`
-	JobTitle       string     `json:"jobTitle" bson:"jobTitle"`
-	PhoneNumber    string     `json:"phoneNumber" bson:"phoneNumber"`
-	Email          string     `json:"email" bson:"email"`
-	Hobbies        []string   `json:"hobbies" bson:"hobbies"`
-	Photo          string     `json:"photo" bson:"photo"`
-	GraduateSchool string     `json:"graduateSchool" bson:"graduateSchool"`
-	Experience     string     `json:"experience" bson:"experience"`
-	Github         string     `json:"github" bson:"github"`
-	Linkedin       string     `json:"linkedin" bson:"linkedin"`
-	OtherSM        []string   `json:"otherSM" bson:"otherSM"`
-	PDFCV          string     `json:"pdfCV" bson:"pdfCV"`
-	Languages      []Language `json:"languages" bson:"languages"`
+	ID          string      `json:"id" bson:"id"`
+	OwnerID     string      `json:"ownerId" bson:"ownerId"`
+	CVName      string      `json:"cvName" bson:"cvName"`
+	NameSurname string      `json:"nameSurname" bson:"nameSurname"`
+	AboutMe     string      `json:"aboutMe" bson:"aboutMe"`
+	JobTitle    string      `json:"jobTitle" bson:"jobTitle"`
+	PhoneNumber string      `json:"phoneNumber" bson:"phoneNumber"`
+	Email       string      `json:"email" bson:"email"`
+	Hobbies     []string    `json:"hobbies" bson:"hobbies"`
+	Photo       string      `json:"photo" bson:"photo"`
+	Education   []Education `json:"education" bson:"education"`
+	Experience  string      `json:"experience" bson:"experience"`
+	Github      string      `json:"github" bson:"github"`
+	Linkedin    string      `json:"linkedin" bson:"linkedin"`
+	OtherSM     []string    `json:"otherSM" bson:"otherSM"`
+	PDFCV       string      `json:"pdfCV" bson:"pdfCV"`
+	Languages   []Language  `json:"languages" bson:"languages"`
 }
 
 type Education struct {
+	School     string `json:"school" bson:"school"`
+	Department string `json:"department" bson:"department"`
+	StartDate  string `json:"startDate" bson:"startDate"`
+	EndDate    string `json:"endDate" bson:"endDate"`
 }
 
 type Language struct {
