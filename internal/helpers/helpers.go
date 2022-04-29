@@ -311,6 +311,13 @@ func CreateCV(cvData *models.CV) {
 	pdf.SetY(pdf.GetY() + 27)
 	pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
 
+	for _, skill := range cvData.Skills {
+		pdf.Br(25)
+		pdf.SetX(250)
+		pdf.SetFont("robotoBold", "", 20)
+		pdf.Cell(nil, skill.Name)
+	}
+
 	err = pdf.WritePdf("./test.pdf")
 	if err != nil {
 		fmt.Println(err)

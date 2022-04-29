@@ -64,6 +64,12 @@ type CV struct {
 	OtherSM     []string     `json:"otherSM" bson:"otherSM"`
 	PDFCV       string       `json:"pdfCV" bson:"pdfCV"`
 	Languages   []Language   `json:"languages" bson:"languages"`
+	Skills      []Skill      `json:"skills" bson:"skilss"`
+}
+
+type Skill struct {
+	Name  string `json:"name" bson:"name"`
+	Level string `json:"level" bson:"level"`
 }
 
 type Experience struct {
