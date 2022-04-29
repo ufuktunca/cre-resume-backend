@@ -1,11 +1,11 @@
 
 generate-mocks:
-	mockgen -destination=mocks/mock_user_service.go -source=./internal/user/service.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/service UserServiceInterface
-	mockgen -destination=mocks/mock_user_repository.go -source=./internal/user/repository.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/repository UserRepositoryInterface
-	mockgen -destination=mocks/mock_jobPost_service.go -source=./internal/job-post/service.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/job-post/service JobPostServiceInterface
-	mockgen -destination=mocks/mock_jobPost_repository.go -source=./internal/job-post/repository.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/job-post/repository JobPostRepositoryInterface
-	mockgen -destination=mocks/mock_cv_service.go -source=./internal/cv/service.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/cv/service CVServiceInterface
-	mockgen -destination=mocks/mock_cv_repository.go -source=./internal/cv/repository.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/cv/repository CVRepositoryInterface
+	mockgen -destination=mocks/mock_user_view.go -source=./internal/user/view.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/view UserViewInterface
+	mockgen -destination=mocks/mock_user_model.go -source=./internal/user/model.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/user/model UserModelInterface
+	mockgen -destination=mocks/mock_jobPost_view.go -source=./internal/job-post/view.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/job-post/view JobPostViewInterface
+	mockgen -destination=mocks/mock_jobPost_model.go -source=./internal/job-post/model.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/job-post/model JobPostModelInterface
+	mockgen -destination=mocks/mock_cv_view.go -source=./internal/cv/view.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/cv/view CVViewInterface
+	mockgen -destination=mocks/mock_cv_model.go -source=./internal/cv/model.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/cv/model CVModelInterface
 	mockgen -destination=mocks/mock_email.go -source=./internal/email/email.go -package mocks github.com/ufuktunca/cre-resume-frontend/internal/email/email EmailInterface
 																									
 build: clean

@@ -11,21 +11,21 @@ import (
 func main() {
 	app := fiber.New()
 
-	userRepository := user.NewUserRepository("mongodb://localhost:27017")
-	userService := user.NewUserService(userRepository)
-	userController := user.NewUserHandler(userService)
+	userModel := user.NewUserModel("mongodb://localhost:27017")
+	userView := user.NewUserView(userModel)
+	userController := user.NewUserController(userView)
 
-	jobPostRepository := jobPost.NewJobRepository("mongodb://localhost:27017")
-	jobPostService := jobPost.NewJobPostService(jobPostRepository, userRepository)
-	jobPostHandler := jobPost.NewJobPostHandler(jobPostService)
+	jobPostModel := jobPost.NewJobModel("mongodb://localhost:27017")
+	jobPostView := jobPost.NewJobPostView(jobPostModel, userModel)
+	jobPostController := jobPost.NewJobPostController(jobPostView)
 
-	cvRepository := cv.CreateCVRepository("mongodb://localhost:27017")
-	cvService := cv.NewCVService(cvRepository)
-	cvHandler := cv.NewCVHandler(cvService)
+	cvModel := cv.CreateCVModel("mongodb://localhost:27017")
+	cvView := cv.NewCVView(cvModel)
+	cvController := cv.NewCVController(cvView)
 
-	userController.SetupUserHandler(app)
-	jobPostHandler.SetupJobPostHandler(app)
-	cvHandler.SetupRouteApp(app)
+	userController.SetupUserController(app)
+	jobPostController.SetupJobPostController(app)
+	cvController.SetupRouteApp(app)
 
 	app.Listen(":8080")
 }
