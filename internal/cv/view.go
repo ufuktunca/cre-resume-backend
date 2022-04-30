@@ -11,6 +11,7 @@ type CVView struct {
 
 type CVViewInterface interface {
 	CreateCV(cvData *models.CV, userID string) error
+	GetCVs(userID string) (*[]models.CV, error)
 }
 
 func NewCVView(cvModel CVModelInterface) *CVView {
@@ -27,4 +28,8 @@ func (cs *CVView) CreateCV(cvData *models.CV, userID string) error {
 
 	cvData.PDFCV = string(bytePdf)
 	return nil
+}
+
+func (cs *CVView) GetCVs(userID string) (*[]models.CV, error) {
+	return cs.Model.GetCVs(userID)
 }

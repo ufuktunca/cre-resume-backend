@@ -20,6 +20,7 @@ func NewCVController(view CVViewInterface) *CVController {
 func (cv *CVController) SetupRouteApp(app *fiber.App) {
 	app.Use(auth.VerifyToken)
 	app.Post("/cv", cv.CreateCV)
+	app.Get("/user/cv", cv.GetCVHandler)
 }
 
 func (cv *CVController) CreateCV(c *fiber.Ctx) error {
@@ -37,6 +38,20 @@ func (cv *CVController) CreateCV(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
 	}
+
+	return nil
+}
+
+func (cv *CVController) GetCVHandler(c *fiber.Ctx) error {
+	userID := c.Get("user-id", "")
+
+	CVs, err := cv.View.GetCVs(userID)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
+	c.JSON(CVs)
 
 	return nil
 }
