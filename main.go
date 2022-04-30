@@ -6,10 +6,12 @@ import (
 	"cre-resume-backend/internal/user"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
 	app := fiber.New()
+	app.Use(cors.New())
 
 	userModel := user.NewUserModel("mongodb://localhost:27017")
 	userView := user.NewUserView(userModel)

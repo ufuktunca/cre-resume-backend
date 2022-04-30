@@ -2,7 +2,6 @@ package user
 
 import (
 	"cre-resume-backend/internal/models"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -52,15 +51,15 @@ func (u *User) LoginUserController(c *fiber.Ctx) error {
 		return err
 	}
 
-	token, err := u.View.Login(login)
+	loginType := c.Query("type", "")
+
+	token, err := u.View.Login(login, loginType)
 	if err != nil {
 		return err
 	}
 
-	c.Cookie(&fiber.Cookie{
-		Name:    "auth",
-		Value:   *token,
-		Expires: time.Now().Add(12 * time.Hour),
+	c.JSON(models.Auth{
+		Token: *token,
 	})
 
 	return nil

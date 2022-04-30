@@ -82,6 +82,7 @@ func Test_Login(t *testing.T) {
 		userData := &models.User{
 			Email:    "ufuk.tunca@gmail.com",
 			Password: "$2a$14$6Vad1pGBrdI6FuWZKUfImutaCfJL8BNgqWJEBLReyyts6gLWQ64h.",
+			Type:     "employee",
 		}
 
 		mockUserModel.
@@ -90,7 +91,7 @@ func Test_Login(t *testing.T) {
 			Return(userData, nil)
 		userView := user.NewUserView(mockUserModel)
 
-		jwtToken, err := userView.Login(login)
+		jwtToken, err := userView.Login(login, "employee")
 
 		assert.Nil(t, err)
 		assert.NotNil(t, jwtToken)
@@ -112,7 +113,7 @@ func Test_Login(t *testing.T) {
 
 		userView := user.NewUserView(mockUserModel)
 
-		jwtToken, err := userView.Login(&login)
+		jwtToken, err := userView.Login(&login, "employee")
 
 		assert.NotNil(t, err)
 		assert.Nil(t, jwtToken)

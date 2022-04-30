@@ -45,16 +45,16 @@ func (_mr *MockUserViewInterfaceMockRecorder) Register(arg0 interface{}) *gomock
 }
 
 // Login mocks base method
-func (_m *MockUserViewInterface) Login(login *models.Login) (*string, error) {
-	ret := _m.ctrl.Call(_m, "Login", login)
+func (_m *MockUserViewInterface) Login(login *models.Login, loginType string) (*string, error) {
+	ret := _m.ctrl.Call(_m, "Login", login, loginType)
 	ret0, _ := ret[0].(*string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Login indicates an expected call of Login
-func (_mr *MockUserViewInterfaceMockRecorder) Login(arg0 interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Login", reflect.TypeOf((*MockUserViewInterface)(nil).Login), arg0)
+func (_mr *MockUserViewInterfaceMockRecorder) Login(arg0, arg1 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Login", reflect.TypeOf((*MockUserViewInterface)(nil).Login), arg0, arg1)
 }
 
 // ActivateUser mocks base method

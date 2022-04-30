@@ -16,7 +16,7 @@ type View struct {
 
 type UserViewInterface interface {
 	Register(register *models.User) error
-	Login(login *models.Login) (*string, error)
+	Login(login *models.Login, loginType string) (*string, error)
 	ActivateUser(userID string) error
 }
 
@@ -51,10 +51,14 @@ func (s *View) Register(register *models.User) error {
 	return email.SendMail(register.Email, models.RegistirationMailContent+"localhost:8080/verify?userID="+register.UserID)
 }
 
-func (s *View) Login(login *models.Login) (*string, error) {
+func (s *View) Login(login *models.Login, loginType string) (*string, error) {
 	createdUser, err := s.Model.GetUserByEmail(login.Email)
 	if err != nil {
 		return nil, err
+	}
+
+	if createdUser.Type != loginType {
+		return nil, errors.New("user type is not correct")
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(createdUser.Password), []byte(login.Password))

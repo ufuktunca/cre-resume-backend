@@ -87,7 +87,7 @@ func Test_LoginController(t *testing.T) {
 		reqBody, err := json.Marshal(&login)
 		assert.Nil(t, err)
 
-		req, _ := http.NewRequest(fiber.MethodPost, "/login", bytes.NewReader(reqBody))
+		req, _ := http.NewRequest(fiber.MethodPost, "/login?type=employee", bytes.NewReader(reqBody))
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Set("Content-Length", strconv.Itoa(len(reqBody)))
 
@@ -97,7 +97,7 @@ func Test_LoginController(t *testing.T) {
 		data := "123213"
 		mockUserView.
 			EXPECT().
-			Login(&login).
+			Login(&login, "employee").
 			Return(&data, nil)
 
 		resp, _ := app.Test(req)
