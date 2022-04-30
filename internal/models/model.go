@@ -22,7 +22,7 @@ type Login struct {
 }
 
 type Claims struct {
-	Username string `json:"username"`
+	UserID string `json:"userId"`
 	jwt.StandardClaims
 }
 

@@ -32,11 +32,6 @@ func Test_CreateJobPost(t *testing.T) {
 			Type:     "employer",
 		}
 
-		mockUserModel.
-			EXPECT().
-			GetUserByEmail("test@gmail.com").
-			Return(testUser, nil)
-
 		mockJobPostModel.
 			EXPECT().
 			CreateJobPost(gomock.Any()).
@@ -97,16 +92,6 @@ func Test_ApplyJob(t *testing.T) {
 		applyJobDTO := models.ApplyJobPostDTO{
 			CVID: "askdjkas",
 		}
-
-		testUser := models.User{
-			UserID: "234u23423",
-			Email:  "test@gmail.com",
-		}
-
-		mockUserModel.
-			EXPECT().
-			GetUserByEmail("test@gmail.com").
-			Return(&testUser, nil)
 
 		mockJobPostModel.
 			EXPECT().

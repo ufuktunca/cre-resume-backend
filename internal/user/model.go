@@ -19,6 +19,7 @@ type UserModelInterface interface {
 	GetUserByEmail(email string) (*models.User, error)
 	CreateUser(user *models.User) error
 	Activation(userID string) error
+	GetUserByUserID(userID string) (*models.User, error)
 }
 
 func NewUserModel(uri string) *Respository {
@@ -42,6 +43,28 @@ func (r *Respository) GetUserByEmail(email string) (*models.User, error) {
 	defer cancel()
 
 	dbResult := collection.FindOne(ctx, bson.M{"email": email})
+
+	if dbResult.Err() != nil {
+		return nil, dbResult.Err()
+	}
+
+	user := &models.User{}
+	err := dbResult.Decode(&user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (r *Respository) GetUserByUserID(userID string) (*models.User, error) {
+	collection := r.MongoClient.Database("cre-resume").Collection("users")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	dbResult := collection.FindOne(ctx, bson.M{"userID": userID})
 
 	if dbResult.Err() != nil {
 		return nil, dbResult.Err()

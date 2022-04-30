@@ -21,17 +21,17 @@ func VerifyToken(c *fiber.Ctx) error {
 		c.Status(fiber.StatusUnauthorized)
 		return nil
 	}
-	c.Request().Header.Set("user-email", claims.Username)
+	c.Request().Header.Set("user-id", claims.UserID)
 	c.Next()
 
 	return nil
 }
 
-func CreateToken(email string) (*string, error) {
+func CreateToken(id string) (*string, error) {
 
 	expirationTime := time.Now().Add(12 * time.Hour)
 	claims := models.Claims{
-		Username: email,
+		UserID: id,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

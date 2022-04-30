@@ -30,7 +30,7 @@ func GenerateUUID(length int) string {
 	return uuid[0:length]
 }
 
-func CreateCV(cvData *models.CV) {
+func CreateCV(cvData *models.CV) ([]byte, error) {
 	pdf := gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{PageSize: gopdf.Rect{W: 840, H: 1188}})
 
@@ -49,7 +49,7 @@ func CreateCV(cvData *models.CV) {
 	err = pdf.SetFont("wts11", "", 14)
 	if err != nil {
 		log.Print(err.Error())
-		return
+		return nil, err
 	}
 
 	pdf.SetFillColor(53, 59, 69)
@@ -65,7 +65,7 @@ func CreateCV(cvData *models.CV) {
 	imgData, err := gopdf.ImageHolderByBytes(byteImage)
 	if err != nil {
 		log.Print(err.Error())
-		return
+		return nil, err
 	}
 
 	pdf.ImageByHolder(imgData, 72, 50, &gopdf.Rect{W: float64(imageWidth), H: float64(imageHeight)})
@@ -73,13 +73,13 @@ func CreateCV(cvData *models.CV) {
 	err = pdf.SetFont("robotoBold", "", 16)
 	if err != nil {
 		log.Print(err.Error())
-		return
+		return nil, err
 	}
 	pdf.SetTextColor(255, 255, 255)
 
 	jobTitleLength, err := pdf.MeasureTextWidth(cvData.JobTitle)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	pdf.SetX((220 - jobTitleLength) / 2)
@@ -89,7 +89,7 @@ func CreateCV(cvData *models.CV) {
 	err = pdf.SetFont("wts11", "", 14)
 	if err != nil {
 		log.Print(err.Error())
-		return
+		return nil, err
 	}
 
 	nameSurnameLength, _ := pdf.MeasureTextWidth(cvData.NameSurname)
@@ -108,7 +108,7 @@ func CreateCV(cvData *models.CV) {
 	err = pdf.SetFont("robotoBold", "", 14)
 	if err != nil {
 		log.Print(err.Error())
-		return
+		return nil, err
 	}
 
 	pdf.SetX(20)
@@ -322,6 +322,8 @@ func CreateCV(cvData *models.CV) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	return pdf.GetBytesPdf(), nil
 }
 
 func resizeImage(byteImage []byte, widthCondition int, heightCondition int) ([]byte, int, int) {
@@ -337,7 +339,7 @@ func resizeImage(byteImage []byte, widthCondition int, heightCondition int) ([]b
 		err := png.Encode(buf, resizedImage)
 
 		if err != nil {
-			//return nil, err
+			//return nil nil, err
 		}
 
 		byteImage = buf.Bytes()
@@ -353,7 +355,7 @@ func resizeImage(byteImage []byte, widthCondition int, heightCondition int) ([]b
 		err := png.Encode(buf, resizedImage)
 
 		if err != nil {
-			//return nil, err
+			//return nil nil, err
 		}
 
 		byteImage = buf.Bytes()

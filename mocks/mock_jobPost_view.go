@@ -33,8 +33,8 @@ func (_m *MockJobPostViewInterface) EXPECT() *MockJobPostViewInterfaceMockRecord
 }
 
 // CreateJobPost mocks base method
-func (_m *MockJobPostViewInterface) CreateJobPost(jobPost *models.JobPost, ownerEmail string) (*models.JobPost, error) {
-	ret := _m.ctrl.Call(_m, "CreateJobPost", jobPost, ownerEmail)
+func (_m *MockJobPostViewInterface) CreateJobPost(jobPost *models.JobPost, userID string) (*models.JobPost, error) {
+	ret := _m.ctrl.Call(_m, "CreateJobPost", jobPost, userID)
 	ret0, _ := ret[0].(*models.JobPost)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -59,8 +59,8 @@ func (_mr *MockJobPostViewInterfaceMockRecorder) GetJobPosts(arg0, arg1, arg2, a
 }
 
 // ApplyJobPost mocks base method
-func (_m *MockJobPostViewInterface) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEmail string, jobID string) error {
-	ret := _m.ctrl.Call(_m, "ApplyJobPost", jobPostDTO, applierEmail, jobID)
+func (_m *MockJobPostViewInterface) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID string, jobID string) error {
+	ret := _m.ctrl.Call(_m, "ApplyJobPost", jobPostDTO, userID, jobID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }

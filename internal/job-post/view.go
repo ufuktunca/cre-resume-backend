@@ -13,9 +13,9 @@ type JobPostView struct {
 }
 
 type JobPostViewInterface interface {
-	CreateJobPost(jobPost *models.JobPost, ownerEmail string) (*models.JobPost, error)
+	CreateJobPost(jobPost *models.JobPost, userID string) (*models.JobPost, error)
 	GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error)
-	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEmail, jobID string) error
+	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, jobID string) error
 	GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error)
 }
 
@@ -26,19 +26,14 @@ func NewJobPostView(model JobPostModelInterface, userModel user.UserModelInterfa
 	}
 }
 
-func (s *JobPostView) CreateJobPost(jobPost *models.JobPost, ownerEmail string) (*models.JobPost, error) {
+func (s *JobPostView) CreateJobPost(jobPost *models.JobPost, userID string) (*models.JobPost, error) {
 	jobPost.ID = helpers.GenerateUUID(8)
 
-	owner, err := s.UserModel.GetUserByEmail(ownerEmail)
-	if err != nil {
-		return nil, err
-	}
-
-	jobPost.OwnerID = owner.UserID
+	jobPost.OwnerID = userID
 	jobPost.CreatedAt = time.Now().UTC().Round(time.Second)
 	jobPost.UpdatedAt = time.Now().UTC().Round(time.Second)
 
-	err = s.Model.CreateJobPost(jobPost)
+	err := s.Model.CreateJobPost(jobPost)
 	if err != nil {
 		return nil, err
 	}
@@ -50,12 +45,7 @@ func (s *JobPostView) GetJobPosts(jobPostType, category, from, to, sort string) 
 	return s.Model.GetJobPosts(jobPostType, category, from, to, sort)
 }
 
-func (s *JobPostView) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEmail, jobID string) error {
-	applierUser, err := s.UserModel.GetUserByEmail(applierEmail)
-	if err != nil {
-		return err
-	}
-
+func (s *JobPostView) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, jobID string) error {
 	jobPost, err := s.Model.GetJobPostByID(jobID)
 	if err != nil {
 		return err
@@ -65,15 +55,15 @@ func (s *JobPostView) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, applierEm
 		ID:          helpers.GenerateUUID(8),
 		JobPostID:   jobPost.ID,
 		CVID:        jobPostDTO.CVID,
-		ApplierID:   applierUser.UserID,
+		ApplierID:   userID,
 		PostOwnerID: jobPost.OwnerID,
 	}
 
 	return s.Model.CreateApplyJobPost(applyJobPost)
 }
 
-func (s *JobPostView) GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error) {
-	user, err := s.UserModel.GetUserByEmail(userEmail)
+func (s *JobPostView) GetUserJobPosts(userID string, postType string) (*[]models.JobPost, error) {
+	user, err := s.UserModel.GetUserByEmail(userID)
 	if err != nil {
 		return nil, err
 	}

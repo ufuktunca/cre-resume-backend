@@ -33,8 +33,8 @@ func (_m *MockCVViewInterface) EXPECT() *MockCVViewInterfaceMockRecorder {
 }
 
 // CreateCV mocks base method
-func (_m *MockCVViewInterface) CreateCV(cvData *models.CV, ownerEmail string) error {
-	ret := _m.ctrl.Call(_m, "CreateCV", cvData, ownerEmail)
+func (_m *MockCVViewInterface) CreateCV(cvData *models.CV, userID string) error {
+	ret := _m.ctrl.Call(_m, "CreateCV", cvData, userID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }

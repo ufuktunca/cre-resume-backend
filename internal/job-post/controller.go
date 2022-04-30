@@ -26,8 +26,8 @@ func (j *JobPostController) SetupJobPostController(app *fiber.App) {
 
 func (j *JobPostController) CreateJobPost(c *fiber.Ctx) error {
 	jobPost := &models.JobPost{}
-	ownerEmail := c.Get("user-email", "")
-	if ownerEmail == "" {
+	userID := c.Get("user-id", "")
+	if userID == "" {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
 	}
@@ -38,7 +38,7 @@ func (j *JobPostController) CreateJobPost(c *fiber.Ctx) error {
 		return nil
 	}
 
-	jobPostData, err := j.View.CreateJobPost(jobPost, ownerEmail)
+	jobPostData, err := j.View.CreateJobPost(jobPost, userID)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
@@ -67,7 +67,7 @@ func (j *JobPostController) GetJobPosts(c *fiber.Ctx) error {
 }
 
 func (j *JobPostController) ApplyJobController(c *fiber.Ctx) error {
-	ownerEmail := c.Get("user-email", "")
+	userID := c.Get("user-id", "")
 	jobID := c.Params("jobId")
 
 	applyJobDTO := models.ApplyJobPostDTO{}
@@ -77,7 +77,7 @@ func (j *JobPostController) ApplyJobController(c *fiber.Ctx) error {
 		return nil
 	}
 
-	err = j.View.ApplyJobPost(&applyJobDTO, ownerEmail, jobID)
+	err = j.View.ApplyJobPost(&applyJobDTO, userID, jobID)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
@@ -88,9 +88,9 @@ func (j *JobPostController) ApplyJobController(c *fiber.Ctx) error {
 
 func (j *JobPostController) GetUserJobPosts(c *fiber.Ctx) error {
 	postType := c.Params("type")
-	userEmail := c.Get("user-email", "")
+	userID := c.Get("user-id", "")
 
-	jobPosts, err := j.View.GetUserJobPosts(userEmail, postType)
+	jobPosts, err := j.View.GetUserJobPosts(userID, postType)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return nil

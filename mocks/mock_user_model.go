@@ -68,3 +68,16 @@ func (_m *MockUserModelInterface) Activation(userID string) error {
 func (_mr *MockUserModelInterfaceMockRecorder) Activation(arg0 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Activation", reflect.TypeOf((*MockUserModelInterface)(nil).Activation), arg0)
 }
+
+// GetUserByUserID mocks base method
+func (_m *MockUserModelInterface) GetUserByUserID(userID string) (*models.User, error) {
+	ret := _m.ctrl.Call(_m, "GetUserByUserID", userID)
+	ret0, _ := ret[0].(*models.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByUserID indicates an expected call of GetUserByUserID
+func (_mr *MockUserModelInterfaceMockRecorder) GetUserByUserID(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetUserByUserID", reflect.TypeOf((*MockUserModelInterface)(nil).GetUserByUserID), arg0)
+}

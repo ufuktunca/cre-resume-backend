@@ -34,7 +34,7 @@ func Test_CreateEmployeeJobPost(t *testing.T) {
 			Type:     "employee",
 		}
 
-		token, err := auth.CreateToken("test@asdasdas.com")
+		token, err := auth.CreateToken("2342342352")
 		assert.Nil(t, err)
 
 		cookie := &http.Cookie{
@@ -55,7 +55,7 @@ func Test_CreateEmployeeJobPost(t *testing.T) {
 
 		mockJobPostView.
 			EXPECT().
-			CreateJobPost(&jobPostData, "test@asdasdas.com").
+			CreateJobPost(&jobPostData, "2342342352").
 			Return(nil, nil)
 
 		resp, _ := app.Test(req)
@@ -71,7 +71,7 @@ func Test_GetJobPosts(t *testing.T) {
 	t.Run("GivenUserWhenSentGetJobPostRequestWithEmployeeParameterThenShouldReturnJobPosts", func(t *testing.T) {
 		app := fiber.New()
 
-		token, err := auth.CreateToken("test@asdasdas.com")
+		token, err := auth.CreateToken("234234234")
 		assert.Nil(t, err)
 		cookie := &http.Cookie{
 			Name:  "auth",
@@ -123,7 +123,7 @@ func Test_ApplyJobController(t *testing.T) {
 	t.Run("GivenUserWhenSentGetJobPostRequestWithEmployeeParameterThenShouldReturnJobPosts", func(t *testing.T) {
 		app := fiber.New()
 
-		token, err := auth.CreateToken("test@asdasdas.com")
+		token, err := auth.CreateToken("234234234")
 		assert.Nil(t, err)
 		cookie := &http.Cookie{
 			Name:  "auth",
@@ -147,7 +147,7 @@ func Test_ApplyJobController(t *testing.T) {
 
 		mockJobPostView.
 			EXPECT().
-			ApplyJobPost(&applyJobDTO, "test@asdasdas.com", "2938479").
+			ApplyJobPost(&applyJobDTO, "234234234", "2938479").
 			Return(nil)
 
 		resp, err := app.Test(req)
@@ -163,7 +163,7 @@ func Test_GetUsersJobPostsHanlder(t *testing.T) {
 	t.Run("GivenUserWhenSentGetJobPostRequestWithEmployeeParameterThenShouldReturnJobPostOnlyUserJobPosts", func(t *testing.T) {
 		app := fiber.New()
 
-		token, err := auth.CreateToken("test@asdasdas.com")
+		token, err := auth.CreateToken("234234234")
 		assert.Nil(t, err)
 		cookie := &http.Cookie{
 			Name:  "auth",
@@ -192,7 +192,7 @@ func Test_GetUsersJobPostsHanlder(t *testing.T) {
 
 		mockJobPostView.
 			EXPECT().
-			GetUserJobPosts("test@asdasdas.com", "employee").
+			GetUserJobPosts("234234234", "employee").
 			Return(expectedResult, nil)
 
 		resp, _ := app.Test(req)

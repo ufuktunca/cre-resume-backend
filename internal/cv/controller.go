@@ -30,9 +30,13 @@ func (cv *CVController) CreateCV(c *fiber.Ctx) error {
 		return nil
 	}
 
-	ownerEmail := c.Get("user-email", "")
+	userID := c.Get("user-id", "")
 
-	cv.View.CreateCV(&cvData, ownerEmail)
+	err = cv.View.CreateCV(&cvData, userID)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
 
 	return nil
 }

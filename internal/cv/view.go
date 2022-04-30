@@ -10,7 +10,7 @@ type CVView struct {
 }
 
 type CVViewInterface interface {
-	CreateCV(cvData *models.CV, ownerEmail string) error
+	CreateCV(cvData *models.CV, userID string) error
 }
 
 func NewCVView(cvModel CVModelInterface) *CVView {
@@ -19,7 +19,12 @@ func NewCVView(cvModel CVModelInterface) *CVView {
 	}
 }
 
-func (cs *CVView) CreateCV(cvData *models.CV, ownerEmail string) error {
-	helpers.CreateCV(cvData)
+func (cs *CVView) CreateCV(cvData *models.CV, userID string) error {
+	bytePdf, err := helpers.CreateCV(cvData)
+	if err != nil {
+		return err
+	}
+
+	cvData.PDFCV = string(bytePdf)
 	return nil
 }
