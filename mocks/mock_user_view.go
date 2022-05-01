@@ -68,3 +68,15 @@ func (_m *MockUserViewInterface) ActivateUser(userID string) error {
 func (_mr *MockUserViewInterfaceMockRecorder) ActivateUser(arg0 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "ActivateUser", reflect.TypeOf((*MockUserViewInterface)(nil).ActivateUser), arg0)
 }
+
+// ReSend mocks base method
+func (_m *MockUserViewInterface) ReSend(email string) error {
+	ret := _m.ctrl.Call(_m, "ReSend", email)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ReSend indicates an expected call of ReSend
+func (_mr *MockUserViewInterfaceMockRecorder) ReSend(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "ReSend", reflect.TypeOf((*MockUserViewInterface)(nil).ReSend), arg0)
+}

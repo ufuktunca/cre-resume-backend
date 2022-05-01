@@ -5,6 +5,7 @@ import (
 	"cre-resume-backend/internal/user"
 	"cre-resume-backend/mocks"
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -134,6 +135,25 @@ func Test_Activation(t *testing.T) {
 		userView := user.NewUserView(mockUserModel)
 		err := userView.ActivateUser("kasjdklasd")
 
+		assert.Nil(t, err)
+	})
+}
+
+func Test_ReSend(t *testing.T) {
+	t.Run("Given user login When sent valid data Then should change activatin ", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		mockUserModel := mocks.NewMockUserModelInterface(controller)
+
+		mockUserModel.
+			EXPECT().
+			GetUserByEmail("ufukbaristunca@windowslive.com").
+			Return(&models.User{
+				Email: "ufukbaristunca@windowslive.com",
+			}, nil)
+
+		userView := user.NewUserView(mockUserModel)
+		err := userView.ReSend("ufukbaristunca@windowslive.com")
+		fmt.Println(err)
 		assert.Nil(t, err)
 	})
 }

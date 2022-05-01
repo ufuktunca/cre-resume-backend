@@ -20,7 +20,7 @@ func (u *User) SetupUserController(app *fiber.App) {
 	app.Post("/login", u.LoginUserController)
 	app.Post("/register", u.RegisterUserController)
 	app.Get("/activation", u.ActivateUserController)
-
+	app.Post("/reSend", u.ReSendController)
 }
 
 func (u *User) RegisterUserController(c *fiber.Ctx) error {
@@ -79,4 +79,16 @@ func (u *User) ActivateUserController(c *fiber.Ctx) error {
 	}
 
 	return nil
+}
+
+func (u *User) ReSendController(c *fiber.Ctx) error {
+	reSend := models.ReSend{}
+
+	err := c.BodyParser(&reSend)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
+	return u.View.ReSend(reSend.Email)
 }

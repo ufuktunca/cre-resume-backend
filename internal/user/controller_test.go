@@ -105,3 +105,34 @@ func Test_LoginController(t *testing.T) {
 		assert.Equal(t, resp.StatusCode, 200)
 	})
 }
+
+func Test_ReSendHandler(t *testing.T) {
+	t.Run("Given user When send a resend activation email request Then should get status 200", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		mockUserView := mocks.NewMockUserViewInterface(controller)
+
+		app := fiber.New()
+
+		reSend := user_models.ReSend{
+			Email: "ufutunca@gmail.com",
+		}
+
+		reqBody, err := json.Marshal(&reSend)
+		assert.Nil(t, err)
+
+		req, _ := http.NewRequest(fiber.MethodPost, "/reSend", bytes.NewReader(reqBody))
+		req.Header.Add("Content-Type", "application/json")
+		req.Header.Set("Content-Length", strconv.Itoa(len(reqBody)))
+
+		userController := user.NewUserController(mockUserView)
+		userController.SetupUserController(app)
+
+		mockUserView.
+			EXPECT().
+			ReSend(reSend.Email).
+			Return(nil)
+
+		resp, _ := app.Test(req)
+		assert.Equal(t, resp.StatusCode, 200)
+	})
+}

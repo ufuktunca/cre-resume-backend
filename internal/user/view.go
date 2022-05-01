@@ -18,6 +18,7 @@ type UserViewInterface interface {
 	Register(register *models.User) error
 	Login(login *models.Login, loginType string) (*string, error)
 	ActivateUser(userID string) error
+	ReSend(email string) error
 }
 
 func NewUserView(userModel UserModelInterface) *View {
@@ -57,10 +58,6 @@ func (s *View) Login(login *models.Login, loginType string) (*string, error) {
 		return nil, err
 	}
 
-	if !createdUser.UserActivate {
-		return nil, models.ActivationError
-	}
-
 	if createdUser.Type != loginType {
 		return nil, errors.New("user type is not correct")
 	}
@@ -68,6 +65,10 @@ func (s *View) Login(login *models.Login, loginType string) (*string, error) {
 	err = bcrypt.CompareHashAndPassword([]byte(createdUser.Password), []byte(login.Password))
 	if err != nil {
 		return nil, errors.New("Password is not matched!!!")
+	}
+
+	if !createdUser.UserActivate {
+		return nil, models.ActivationError
 	}
 
 	token, err := auth.CreateToken(createdUser.Email)
@@ -81,4 +82,13 @@ func (s *View) Login(login *models.Login, loginType string) (*string, error) {
 func (s *View) ActivateUser(userID string) error {
 
 	return s.Model.Activation(userID)
+}
+
+func (s *View) ReSend(userEmail string) error {
+	user, err := s.Model.GetUserByEmail(userEmail)
+	if err != nil {
+		return err
+	}
+
+	return email.SendMail(user.Email, models.RegistirationMailContent+"localhost:8080/verify?userID="+user.UserID)
 }

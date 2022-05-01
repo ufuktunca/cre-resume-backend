@@ -22,6 +22,10 @@ type Login struct {
 	Password string `json:"password" bson:"password"`
 }
 
+type ReSend struct {
+	Email string `json:"email"`
+}
+
 type Claims struct {
 	UserID string `json:"userId"`
 	jwt.StandardClaims
