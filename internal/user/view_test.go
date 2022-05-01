@@ -80,9 +80,10 @@ func Test_Login(t *testing.T) {
 		}
 
 		userData := &models.User{
-			Email:    "ufuk.tunca@gmail.com",
-			Password: "$2a$14$6Vad1pGBrdI6FuWZKUfImutaCfJL8BNgqWJEBLReyyts6gLWQ64h.",
-			Type:     "employee",
+			Email:        "ufuk.tunca@gmail.com",
+			Password:     "$2a$14$6Vad1pGBrdI6FuWZKUfImutaCfJL8BNgqWJEBLReyyts6gLWQ64h.",
+			Type:         "employee",
+			UserActivate: true,
 		}
 
 		mockUserModel.

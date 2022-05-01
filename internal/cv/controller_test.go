@@ -26,10 +26,6 @@ func Test_CreateCVController(t *testing.T) {
 
 		token, err := auth.CreateToken("23423423423")
 		assert.Nil(t, err)
-		cookie := &http.Cookie{
-			Name:  "auth",
-			Value: *token,
-		}
 
 		cvData := models.CV{
 			CVName:      "ufuk-cv-1",
@@ -46,7 +42,7 @@ func Test_CreateCVController(t *testing.T) {
 		assert.Nil(t, err)
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Set("Content-Length", strconv.Itoa(len(reqBody)))
-		req.AddCookie(cookie)
+		req.Header.Add("Authorization", *token)
 
 		cvController := cv.NewCVController(mockCVView)
 		cvController.SetupRouteApp(app)
@@ -71,10 +67,6 @@ func Test_GetCVs(t *testing.T) {
 
 		token, err := auth.CreateToken("234234234")
 		assert.Nil(t, err)
-		cookie := &http.Cookie{
-			Name:  "auth",
-			Value: *token,
-		}
 
 		expectedResult := &[]models.CV{
 			{
@@ -84,9 +76,8 @@ func Test_GetCVs(t *testing.T) {
 		}
 
 		req, err := http.NewRequest(fiber.MethodGet, "/user/cv", nil)
-
 		assert.Nil(t, err)
-		req.AddCookie(cookie)
+		req.Header.Add("Authorization", *token)
 
 		cvController := cv.NewCVController(mockCVView)
 		cvController.SetupRouteApp(app)

@@ -57,6 +57,10 @@ func (s *View) Login(login *models.Login, loginType string) (*string, error) {
 		return nil, err
 	}
 
+	if !createdUser.UserActivate {
+		return nil, models.ActivationError
+	}
+
 	if createdUser.Type != loginType {
 		return nil, errors.New("user type is not correct")
 	}

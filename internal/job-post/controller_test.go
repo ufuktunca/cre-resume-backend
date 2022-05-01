@@ -37,18 +37,13 @@ func Test_CreateEmployeeJobPost(t *testing.T) {
 		token, err := auth.CreateToken("2342342352")
 		assert.Nil(t, err)
 
-		cookie := &http.Cookie{
-			Name:  "auth",
-			Value: *token,
-		}
-
 		reqBody, err := json.Marshal(&jobPostData)
 		assert.Nil(t, err)
 
 		req, _ := http.NewRequest(fiber.MethodPost, "/jobPost/employee", bytes.NewReader(reqBody))
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Set("Content-Length", strconv.Itoa(len(reqBody)))
-		req.AddCookie(cookie)
+		req.Header.Add("Authorization", *token)
 
 		jobPostController := jobPost.NewJobPostController(mockJobPostView)
 		jobPostController.SetupJobPostController(app)
@@ -73,10 +68,6 @@ func Test_GetJobPosts(t *testing.T) {
 
 		token, err := auth.CreateToken("234234234")
 		assert.Nil(t, err)
-		cookie := &http.Cookie{
-			Name:  "auth",
-			Value: *token,
-		}
 
 		expectedResult := &[]models.JobPost{
 			{
@@ -91,9 +82,8 @@ func Test_GetJobPosts(t *testing.T) {
 		}
 
 		req, err := http.NewRequest(fiber.MethodGet, "/jobPost/employee?category=Developer&from=3000&to=5000&sort=salary", nil)
-
+		req.Header.Add("Authorization", *token)
 		assert.Nil(t, err)
-		req.AddCookie(cookie)
 
 		jobPostController := jobPost.NewJobPostController(mockJobPostView)
 		jobPostController.SetupJobPostController(app)
@@ -125,10 +115,6 @@ func Test_ApplyJobController(t *testing.T) {
 
 		token, err := auth.CreateToken("234234234")
 		assert.Nil(t, err)
-		cookie := &http.Cookie{
-			Name:  "auth",
-			Value: *token,
-		}
 
 		applyJobDTO := models.ApplyJobPostDTO{
 			CVID: "askdjkas",
@@ -140,7 +126,7 @@ func Test_ApplyJobController(t *testing.T) {
 		assert.Nil(t, err)
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Set("Content-Length", strconv.Itoa(len(reqBody)))
-		req.AddCookie(cookie)
+		req.Header.Add("Authorization", *token)
 
 		jobPostController := jobPost.NewJobPostController(mockJobPostView)
 		jobPostController.SetupJobPostController(app)
@@ -165,10 +151,6 @@ func Test_GetUsersJobPostsHanlder(t *testing.T) {
 
 		token, err := auth.CreateToken("234234234")
 		assert.Nil(t, err)
-		cookie := &http.Cookie{
-			Name:  "auth",
-			Value: *token,
-		}
 
 		expectedResult := &[]models.JobPost{
 			{
@@ -183,9 +165,8 @@ func Test_GetUsersJobPostsHanlder(t *testing.T) {
 		}
 
 		req, err := http.NewRequest(fiber.MethodGet, "/user/jobPost/employee", nil)
-
 		assert.Nil(t, err)
-		req.AddCookie(cookie)
+		req.Header.Add("Authorization", *token)
 
 		jobPostController := jobPost.NewJobPostController(mockJobPostView)
 		jobPostController.SetupJobPostController(app)

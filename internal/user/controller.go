@@ -55,6 +55,10 @@ func (u *User) LoginUserController(c *fiber.Ctx) error {
 
 	token, err := u.View.Login(login, loginType)
 	if err != nil {
+		if err == models.ActivationError {
+			c.Status(fiber.StatusUnauthorized)
+			return nil
+		}
 		return err
 	}
 

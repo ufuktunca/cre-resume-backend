@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -105,3 +106,4 @@ type ApplyJobPostDTO struct {
 }
 
 var RegistirationMailContent = "You have successfully registered to Cre-Resume please click this link for activation.\n "
+var ActivationError = errors.New("User is not activated")

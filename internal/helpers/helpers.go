@@ -34,12 +34,12 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 	pdf := gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{PageSize: gopdf.Rect{W: 840, H: 1188}})
 
-	err := pdf.AddTTFFont("wts11", "./Roboto-Regular.ttf")
+	err := pdf.AddTTFFont("wts11", "./internal/helpers/Roboto-Regular.ttf")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = pdf.AddTTFFont("robotoBold", "./Roboto-Bold.ttf")
+	err = pdf.AddTTFFont("robotoBold", "./internal/helpers/Roboto-Bold.ttf")
 	if err != nil {
 		fmt.Println(err)
 	}
