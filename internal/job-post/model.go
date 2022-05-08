@@ -3,7 +3,6 @@ package jobPost
 import (
 	"context"
 	"cre-resume-backend/internal/models"
-	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -120,7 +119,6 @@ func (r *JobPostModel) GetJobPostsWithUserID(id string, postType string) (*[]mod
 
 func (r *JobPostModel) GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error) {
 	collection := r.MongoClient.Database("cre-resume").Collection("jobPosts")
-	fmt.Println(jobPostType, category, from, to)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

@@ -34,8 +34,12 @@ func (u *User) RegisterUserController(c *fiber.Ctx) error {
 
 	err = u.View.Register(&user)
 	if err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return err
+		if err == models.EmailError {
+			c.Status(fiber.StatusBadRequest)
+			return nil
+		}
+		c.Status(fiber.StatusInternalServerError)
+		return nil
 	}
 
 	c.Status(fiber.StatusCreated)
@@ -89,6 +93,7 @@ func (u *User) ReSendController(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
 	}
+	err = u.View.ReSend(reSend.Email)
 
-	return u.View.ReSend(reSend.Email)
+	return err
 }

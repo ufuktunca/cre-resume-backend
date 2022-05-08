@@ -2,7 +2,6 @@ package auth
 
 import (
 	"cre-resume-backend/internal/models"
-	"fmt"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -15,11 +14,10 @@ func VerifyToken(c *fiber.Ctx) error {
 
 	claims := &models.Claims{}
 	auth := c.Get("Authorization")
-	fmt.Println(auth)
 	tkns, err := jwt.ParseWithClaims(auth, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
-	fmt.Println(err)
+
 	if err != nil || !tkns.Valid {
 		c.Status(fiber.StatusUnauthorized)
 		return nil

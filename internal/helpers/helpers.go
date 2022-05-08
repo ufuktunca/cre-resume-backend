@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"cre-resume-backend/internal/models"
 	"encoding/base64"
-	"fmt"
 	"image"
 	"image/png"
 	"log"
@@ -36,12 +35,12 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 
 	err := pdf.AddTTFFont("wts11", "./internal/helpers/Roboto-Regular.ttf")
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	err = pdf.AddTTFFont("robotoBold", "./internal/helpers/Roboto-Bold.ttf")
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	pdf.AddPage()
@@ -320,7 +319,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 
 	err = pdf.WritePdf("./test.pdf")
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	return pdf.GetBytesPdf(), nil

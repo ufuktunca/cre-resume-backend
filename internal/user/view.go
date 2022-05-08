@@ -33,7 +33,7 @@ func (s *View) Register(register *models.User) error {
 	_, err := s.Model.GetUserByEmail(register.Email)
 
 	if err == nil {
-		return errors.New("This email address already used")
+		return models.EmailError
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(register.Password), 14)
@@ -42,14 +42,14 @@ func (s *View) Register(register *models.User) error {
 	}
 	register.Password = string(hashedPassword)
 	register.UserID = helpers.GenerateUUID(8)
-	register.UserActivate = false
+	register.Activation = false
 
 	err = s.Model.CreateUser(register)
 	if err != nil {
 		return err
 	}
 
-	return email.SendMail(register.Email, models.RegistirationMailContent+"localhost:8080/verify?userID="+register.UserID)
+	return email.SendMail(register.Email, models.RegistirationMailContent+"localhost:3000/login?userID="+register.UserID)
 }
 
 func (s *View) Login(login *models.Login, loginType string) (*string, error) {
@@ -67,7 +67,7 @@ func (s *View) Login(login *models.Login, loginType string) (*string, error) {
 		return nil, errors.New("Password is not matched!!!")
 	}
 
-	if !createdUser.UserActivate {
+	if !createdUser.Activation {
 		return nil, models.ActivationError
 	}
 
@@ -90,5 +90,5 @@ func (s *View) ReSend(userEmail string) error {
 		return err
 	}
 
-	return email.SendMail(user.Email, models.RegistirationMailContent+"localhost:8080/verify?userID="+user.UserID)
+	return email.SendMail(user.Email, models.RegistirationMailContent+"localhost:3000/login?userID="+user.UserID)
 }

@@ -5,7 +5,6 @@ import (
 	"cre-resume-backend/internal/user"
 	"cre-resume-backend/mocks"
 	"errors"
-	"fmt"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -18,13 +17,13 @@ func Test_Register(t *testing.T) {
 		mockUserModel := mocks.NewMockUserModelInterface(controller)
 
 		register := models.User{
-			UserID:       "123123",
-			Name:         "Ufuk",
-			Surname:      "Tunca",
-			Email:        "uftunca72@gmail.com",
-			Password:     "asdşfljsdaşkfjsd",
-			Type:         "Employer",
-			UserActivate: false,
+			UserID:     "123123",
+			Name:       "Ufuk",
+			Surname:    "Tunca",
+			Email:      "uftunca72@gmail.com",
+			Password:   "asdşfljsdaşkfjsd",
+			Type:       "Employer",
+			Activation: false,
 		}
 
 		mockUserModel.
@@ -81,10 +80,10 @@ func Test_Login(t *testing.T) {
 		}
 
 		userData := &models.User{
-			Email:        "ufuk.tunca@gmail.com",
-			Password:     "$2a$14$6Vad1pGBrdI6FuWZKUfImutaCfJL8BNgqWJEBLReyyts6gLWQ64h.",
-			Type:         "employee",
-			UserActivate: true,
+			Email:      "ufuk.tunca@gmail.com",
+			Password:   "$2a$14$6Vad1pGBrdI6FuWZKUfImutaCfJL8BNgqWJEBLReyyts6gLWQ64h.",
+			Type:       "employee",
+			Activation: true,
 		}
 
 		mockUserModel.
@@ -153,7 +152,6 @@ func Test_ReSend(t *testing.T) {
 
 		userView := user.NewUserView(mockUserModel)
 		err := userView.ReSend("ufukbaristunca@windowslive.com")
-		fmt.Println(err)
 		assert.Nil(t, err)
 	})
 }

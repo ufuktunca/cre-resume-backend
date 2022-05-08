@@ -8,13 +8,13 @@ import (
 )
 
 type User struct {
-	UserID       string `json:"userID" bson:"userID"`
-	Name         string `json:"name" bson:"name"`
-	Surname      string `json:"surname" bson:"surname"`
-	Email        string `json:"email" bson:"email"`
-	Password     string `json:"password" bson:"password"`
-	Type         string `json:"type" bson:"type"`
-	UserActivate bool   `json:"userActivate" bson:"userActivate"`
+	UserID     string `json:"userID" bson:"userID"`
+	Name       string `json:"name" bson:"name"`
+	Surname    string `json:"surname" bson:"surname"`
+	Email      string `json:"email" bson:"email"`
+	Password   string `json:"password" bson:"password"`
+	Type       string `json:"type" bson:"type"`
+	Activation bool   `json:"activation" bson:"activation"`
 }
 
 type Login struct {
@@ -111,3 +111,4 @@ type ApplyJobPostDTO struct {
 
 var RegistirationMailContent = "You have successfully registered to Cre-Resume please click this link for activation.\n "
 var ActivationError = errors.New("User is not activated")
+var EmailError = errors.New("This email address already used")

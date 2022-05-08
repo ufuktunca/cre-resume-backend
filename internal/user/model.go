@@ -96,7 +96,7 @@ func (r *Respository) CreateUser(user *models.User) error {
 }
 
 func (r *Respository) Activation(userID string) error {
-	collection := r.MongoClient.Database("MedicalCaseDB").Collection("Users")
+	collection := r.MongoClient.Database("cre-resume").Collection("users")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
