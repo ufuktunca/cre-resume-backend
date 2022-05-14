@@ -130,191 +130,208 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 	pdf.SetX(20)
 	pdf.Cell(nil, cvData.Email)
 
-	pdf.SetFont("robotoBold", "", 14)
-	pdf.SetX(20)
-	pdf.SetY(pdf.GetY() + 20)
-	pdf.Cell(nil, "Github")
-
-	pdf.SetFont("wts11", "", 14)
-	pdf.SetY(pdf.GetY() + 15)
-	pdf.SetX(20)
-	pdf.Cell(nil, cvData.Github)
-
-	githubWidth, _ := pdf.MeasureTextWidth(cvData.Github)
-	pdf.AddExternalLink(cvData.Github, 20, pdf.GetY(), githubWidth, 14)
-
-	pdf.SetFont("robotoBold", "", 14)
-	pdf.SetX(20)
-	pdf.SetY(pdf.GetY() + 20)
-	pdf.Cell(nil, "Linkedin")
-
-	pdf.SetFont("wts11", "", 14)
-	pdf.SetY(pdf.GetY() + 15)
-	pdf.SetX(20)
-	pdf.Cell(nil, cvData.Linkedin)
-
-	linkWidth, _ := pdf.MeasureTextWidth(cvData.Linkedin)
-	pdf.AddExternalLink(cvData.Linkedin, 20, pdf.GetY(), linkWidth, 14)
-
-	pdf.SetFont("robotoBold", "", 14)
-	pdf.SetX(20)
-	pdf.SetY(pdf.GetY() + 20)
-	pdf.Cell(nil, "Other Links")
-
-	pdf.SetFont("wts11", "", 14)
-
-	for _, link := range cvData.OtherSM {
-		pdf.SetY(pdf.GetY() + 15)
-		pdf.SetX(20)
-		pdf.Cell(nil, link)
-
-		linkWidth, _ := pdf.MeasureTextWidth(link)
-		pdf.AddExternalLink(link, 20, pdf.GetY(), linkWidth, 14)
-	}
-
-	pdf.SetFont("robotoBold", "", 16)
-	pdf.SetX(20)
-	pdf.SetY(pdf.GetY() + 25)
-	pdf.Cell(nil, "Hobbies")
-
-	pdf.SetFillColor(200, 200, 200)
-	pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
-
-	pdf.SetFont("wts11", "", 14)
-	for _, hobby := range cvData.Hobbies {
+	if cvData.Github != "" {
+		pdf.SetFont("robotoBold", "", 14)
 		pdf.SetX(20)
 		pdf.SetY(pdf.GetY() + 20)
-		pdf.Cell(nil, hobby)
+		pdf.Cell(nil, "Github")
+
+		pdf.SetFont("wts11", "", 14)
+		pdf.SetY(pdf.GetY() + 15)
+		pdf.SetX(20)
+		pdf.Cell(nil, cvData.Github)
+		githubWidth, _ := pdf.MeasureTextWidth(cvData.Github)
+		pdf.AddExternalLink(cvData.Github, 20, pdf.GetY(), githubWidth, 14)
 	}
 
-	pdf.SetFont("robotoBold", "", 16)
-	pdf.SetX(20)
-	pdf.SetY(pdf.GetY() + 25)
-	pdf.Cell(nil, "Languages")
-
-	pdf.SetFillColor(200, 200, 200)
-	pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
-
-	pdf.SetFont("wts11", "", 14)
-	for _, language := range cvData.Languages {
+	if cvData.Linkedin != "" {
+		pdf.SetFont("robotoBold", "", 14)
 		pdf.SetX(20)
 		pdf.SetY(pdf.GetY() + 20)
-		pdf.Cell(nil, language.Language+" - "+language.Level)
+		pdf.Cell(nil, "Linkedin")
+
+		pdf.SetFont("wts11", "", 14)
+		pdf.SetY(pdf.GetY() + 15)
+		pdf.SetX(20)
+		pdf.Cell(nil, cvData.Linkedin)
+
+		linkWidth, _ := pdf.MeasureTextWidth(cvData.Linkedin)
+		pdf.AddExternalLink(cvData.Linkedin, 20, pdf.GetY(), linkWidth, 14)
 	}
 
-	pdf.SetTextColor(31, 31, 31)
-	pdf.SetFont("robotoBold", "", 25)
-	pdf.SetX(250)
-	pdf.SetY(50)
-	pdf.Cell(nil, "About Me")
+	if len(cvData.OtherSM) > 0 {
+		pdf.SetFont("robotoBold", "", 14)
+		pdf.SetX(20)
+		pdf.SetY(pdf.GetY() + 20)
+		pdf.Cell(nil, "Other Links")
 
-	pdf.SetFillColor(31, 31, 31)
-	pdf.SetY(pdf.GetY() + 27)
-	pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+		pdf.SetFont("wts11", "", 14)
 
-	pdf.SetFont("wts11", "", 17)
-	pdf.SetY(pdf.GetY() + 15)
-	splittedAboutMe, _ := pdf.SplitText(cvData.AboutMe, 500)
-	for _, aboutMeLine := range splittedAboutMe {
-		pdf.SetX(250)
-		pdf.Cell(nil, aboutMeLine)
-		pdf.Br(18)
-	}
+		for _, link := range cvData.OtherSM {
+			pdf.SetY(pdf.GetY() + 15)
+			pdf.SetX(20)
+			pdf.Cell(nil, link)
 
-	pdf.SetTextColor(31, 31, 31)
-	pdf.SetFont("robotoBold", "", 25)
-	pdf.SetX(250)
-	pdf.SetY(pdf.GetY() + 27)
-	pdf.Cell(nil, "Education")
-
-	pdf.SetFillColor(31, 31, 31)
-	pdf.SetY(pdf.GetY() + 27)
-	pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
-
-	for _, education := range cvData.Education {
-		pdf.SetTextColor(145, 145, 145)
-		pdf.SetX(250)
-		pdf.SetY(pdf.GetY() + 15)
-
-		pdf.SetFont("robotoBold", "", 17)
-		pdf.Cell(nil, education.StartDate)
-
-		pdf.SetTextColor(31, 31, 31)
-		pdf.SetX(pdf.GetX() + 15)
-		universityStartX := pdf.GetX()
-		pdf.Cell(nil, education.School)
-
-		pdf.SetTextColor(145, 145, 145)
-		pdf.Br(20)
-		pdf.SetX(250)
-		pdf.Cell(nil, education.EndDate)
-
-		pdf.SetTextColor(31, 31, 31)
-		pdf.SetX(universityStartX)
-		pdf.Cell(nil, education.Department)
-
-		pdf.SetY(pdf.GetY() + 15)
-	}
-
-	pdf.SetTextColor(31, 31, 31)
-	pdf.SetFont("robotoBold", "", 25)
-	pdf.SetX(250)
-	pdf.SetY(pdf.GetY() + 27)
-	pdf.Cell(nil, "Experience")
-
-	pdf.SetFillColor(31, 31, 31)
-	pdf.SetY(pdf.GetY() + 27)
-	pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
-
-	for _, experience := range cvData.Experience {
-		pdf.SetTextColor(145, 145, 145)
-		pdf.SetX(250)
-		pdf.SetY(pdf.GetY() + 15)
-
-		pdf.SetFont("robotoBold", "", 17)
-		pdf.Cell(nil, experience.StartDate)
-
-		pdf.SetTextColor(31, 31, 31)
-		pdf.SetX(pdf.GetX() + 15)
-		universityStartX := pdf.GetX()
-		pdf.Cell(nil, experience.Company)
-
-		pdf.SetTextColor(145, 145, 145)
-		pdf.Br(20)
-		pdf.SetX(250)
-		pdf.Cell(nil, experience.EndDate)
-
-		pdf.SetTextColor(31, 31, 31)
-		pdf.SetX(universityStartX)
-		pdf.Cell(nil, experience.Title)
-
-		splittedDescription, _ := pdf.SplitText(experience.Description, 500)
-		pdf.SetFont("wts11", "", 17)
-		pdf.SetY(pdf.GetY() + 10)
-		for _, descriptionLine := range splittedDescription {
-			pdf.Br(17)
-			pdf.SetX(250)
-			pdf.Cell(nil, descriptionLine)
+			linkWidth, _ := pdf.MeasureTextWidth(link)
+			pdf.AddExternalLink(link, 20, pdf.GetY(), linkWidth, 14)
 		}
-
-		pdf.SetY(pdf.GetY() + 15)
 	}
 
-	pdf.SetTextColor(31, 31, 31)
-	pdf.SetFont("robotoBold", "", 25)
-	pdf.SetX(250)
-	pdf.SetY(pdf.GetY() + 27)
-	pdf.Cell(nil, "Skills")
+	if len(cvData.Hobbies) > 0 {
+		pdf.SetFont("robotoBold", "", 16)
+		pdf.SetX(20)
+		pdf.SetY(pdf.GetY() + 25)
+		pdf.Cell(nil, "Hobbies")
 
-	pdf.SetFillColor(31, 31, 31)
-	pdf.SetY(pdf.GetY() + 27)
-	pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+		pdf.SetFillColor(200, 200, 200)
+		pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
 
-	for _, skill := range cvData.Skills {
-		pdf.Br(25)
+		pdf.SetFont("wts11", "", 14)
+		for _, hobby := range cvData.Hobbies {
+			pdf.SetX(20)
+			pdf.SetY(pdf.GetY() + 20)
+			pdf.Cell(nil, hobby)
+		}
+	}
+
+	if len(cvData.Languages) > 0 {
+		pdf.SetFont("robotoBold", "", 16)
+		pdf.SetX(20)
+		pdf.SetY(pdf.GetY() + 25)
+		pdf.Cell(nil, "Languages")
+
+		pdf.SetFillColor(200, 200, 200)
+		pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
+
+		pdf.SetFont("wts11", "", 14)
+		for _, language := range cvData.Languages {
+			pdf.SetX(20)
+			pdf.SetY(pdf.GetY() + 20)
+			pdf.Cell(nil, language.Language+" - "+language.Level)
+		}
+	}
+
+	if cvData.AboutMe != "" {
+		pdf.SetTextColor(31, 31, 31)
+		pdf.SetFont("robotoBold", "", 25)
 		pdf.SetX(250)
-		pdf.SetFont("robotoBold", "", 20)
-		pdf.Cell(nil, skill.Name)
+		pdf.SetY(50)
+		pdf.Cell(nil, "About Me")
+
+		pdf.SetFillColor(31, 31, 31)
+		pdf.SetY(pdf.GetY() + 27)
+		pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+
+		pdf.SetFont("wts11", "", 17)
+		pdf.SetY(pdf.GetY() + 15)
+		splittedAboutMe, _ := pdf.SplitText(cvData.AboutMe, 500)
+		for _, aboutMeLine := range splittedAboutMe {
+			pdf.SetX(250)
+			pdf.Cell(nil, aboutMeLine)
+			pdf.Br(18)
+		}
+	}
+
+	if len(cvData.Education) > 0 {
+		pdf.SetTextColor(31, 31, 31)
+		pdf.SetFont("robotoBold", "", 25)
+		pdf.SetX(250)
+		pdf.SetY(pdf.GetY() + 27)
+		pdf.Cell(nil, "Education")
+
+		pdf.SetFillColor(31, 31, 31)
+		pdf.SetY(pdf.GetY() + 27)
+		pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+
+		for _, education := range cvData.Education {
+			pdf.SetTextColor(145, 145, 145)
+			pdf.SetX(250)
+			pdf.SetY(pdf.GetY() + 15)
+
+			pdf.SetFont("robotoBold", "", 17)
+			pdf.Cell(nil, education.StartDate)
+
+			pdf.SetTextColor(31, 31, 31)
+			pdf.SetX(pdf.GetX() + 15)
+			universityStartX := pdf.GetX()
+			pdf.Cell(nil, education.School)
+
+			pdf.SetTextColor(145, 145, 145)
+			pdf.Br(20)
+			pdf.SetX(250)
+			pdf.Cell(nil, education.EndDate)
+
+			pdf.SetTextColor(31, 31, 31)
+			pdf.SetX(universityStartX)
+			pdf.Cell(nil, education.Department)
+
+			pdf.SetY(pdf.GetY() + 15)
+		}
+	}
+
+	if len(cvData.Experience) > 0 {
+		pdf.SetTextColor(31, 31, 31)
+		pdf.SetFont("robotoBold", "", 25)
+		pdf.SetX(250)
+		pdf.SetY(pdf.GetY() + 27)
+		pdf.Cell(nil, "Experience")
+
+		pdf.SetFillColor(31, 31, 31)
+		pdf.SetY(pdf.GetY() + 27)
+		pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+
+		for _, experience := range cvData.Experience {
+			pdf.SetTextColor(145, 145, 145)
+			pdf.SetX(250)
+			pdf.SetY(pdf.GetY() + 15)
+
+			pdf.SetFont("robotoBold", "", 17)
+			pdf.Cell(nil, experience.StartDate)
+
+			pdf.SetTextColor(31, 31, 31)
+			pdf.SetX(pdf.GetX() + 15)
+			universityStartX := pdf.GetX()
+			pdf.Cell(nil, experience.Company)
+
+			pdf.SetTextColor(145, 145, 145)
+			pdf.Br(20)
+			pdf.SetX(250)
+			pdf.Cell(nil, experience.EndDate)
+
+			pdf.SetTextColor(31, 31, 31)
+			pdf.SetX(universityStartX)
+			pdf.Cell(nil, experience.Title)
+
+			splittedDescription, _ := pdf.SplitText(experience.Description, 500)
+			pdf.SetFont("wts11", "", 17)
+			pdf.SetY(pdf.GetY() + 10)
+			for _, descriptionLine := range splittedDescription {
+				pdf.Br(17)
+				pdf.SetX(250)
+				pdf.Cell(nil, descriptionLine)
+			}
+
+			pdf.SetY(pdf.GetY() + 15)
+		}
+	}
+
+	if len(cvData.Skills) > 0 {
+		pdf.SetTextColor(31, 31, 31)
+		pdf.SetFont("robotoBold", "", 25)
+		pdf.SetX(250)
+		pdf.SetY(pdf.GetY() + 27)
+		pdf.Cell(nil, "Skills")
+
+		pdf.SetFillColor(31, 31, 31)
+		pdf.SetY(pdf.GetY() + 27)
+		pdf.RectFromUpperLeftWithStyle(250, pdf.GetY(), 500, 1, "F")
+
+		for _, skill := range cvData.Skills {
+			pdf.Br(25)
+			pdf.SetX(250)
+			pdf.SetFont("robotoBold", "", 20)
+			pdf.Cell(nil, skill)
+		}
 	}
 
 	err = pdf.WritePdf("./test.pdf")
