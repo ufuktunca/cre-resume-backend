@@ -3,6 +3,7 @@ package cv
 import (
 	"cre-resume-backend/internal/helpers"
 	"cre-resume-backend/internal/models"
+	"encoding/base64"
 )
 
 type CVView struct {
@@ -21,13 +22,13 @@ func NewCVView(cvModel CVModelInterface) *CVView {
 }
 
 func (cs *CVView) CreateCV(cvData *models.CV, userID string) error {
-	bytePdf, err := helpers.CreateCV(cvData)
+	byteData, err := helpers.CreateCV(cvData)
 	if err != nil {
 		return err
 	}
-
-	cvData.PDFCV = string(bytePdf)
-	return nil
+	base64Data := base64.StdEncoding.EncodeToString(byteData)
+	cvData.PDFCV = base64Data
+	return cs.Model.CreateCV(*cvData)
 }
 
 func (cs *CVView) GetCVs(userID string) (*[]models.CV, error) {

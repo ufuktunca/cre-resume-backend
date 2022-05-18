@@ -114,7 +114,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 	pdf.SetY(pdf.GetY() + 25)
 	pdf.Cell(nil, "Phone")
 
-	pdf.SetFont("wts11", "", 14)
+	pdf.SetFont("wts11", "", 10)
 
 	pdf.SetY(pdf.GetY() + 15)
 	pdf.SetX(20)
@@ -125,7 +125,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 	pdf.SetY(pdf.GetY() + 20)
 	pdf.Cell(nil, "E-mail")
 
-	pdf.SetFont("wts11", "", 14)
+	pdf.SetFont("wts11", "", 10)
 	pdf.SetY(pdf.GetY() + 15)
 	pdf.SetX(20)
 	pdf.Cell(nil, cvData.Email)
@@ -136,7 +136,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 		pdf.SetY(pdf.GetY() + 20)
 		pdf.Cell(nil, "Github")
 
-		pdf.SetFont("wts11", "", 14)
+		pdf.SetFont("wts11", "", 10)
 		pdf.SetY(pdf.GetY() + 15)
 		pdf.SetX(20)
 		pdf.Cell(nil, cvData.Github)
@@ -150,7 +150,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 		pdf.SetY(pdf.GetY() + 20)
 		pdf.Cell(nil, "Linkedin")
 
-		pdf.SetFont("wts11", "", 14)
+		pdf.SetFont("wts11", "", 10)
 		pdf.SetY(pdf.GetY() + 15)
 		pdf.SetX(20)
 		pdf.Cell(nil, cvData.Linkedin)
@@ -165,7 +165,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 		pdf.SetY(pdf.GetY() + 20)
 		pdf.Cell(nil, "Other Links")
 
-		pdf.SetFont("wts11", "", 14)
+		pdf.SetFont("wts11", "", 10)
 
 		for _, link := range cvData.OtherSM {
 			pdf.SetY(pdf.GetY() + 15)
@@ -186,7 +186,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 		pdf.SetFillColor(200, 200, 200)
 		pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
 
-		pdf.SetFont("wts11", "", 14)
+		pdf.SetFont("wts11", "", 10)
 		for _, hobby := range cvData.Hobbies {
 			pdf.SetX(20)
 			pdf.SetY(pdf.GetY() + 20)
@@ -203,7 +203,7 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 		pdf.SetFillColor(200, 200, 200)
 		pdf.RectFromUpperLeftWithStyle(20, pdf.GetY()+15, 180, 1, "F")
 
-		pdf.SetFont("wts11", "", 14)
+		pdf.SetFont("wts11", "", 10)
 		for _, language := range cvData.Languages {
 			pdf.SetX(20)
 			pdf.SetY(pdf.GetY() + 20)
@@ -211,11 +211,12 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 		}
 	}
 
+	pdf.SetX(250)
+	pdf.SetY(50)
+
 	if cvData.AboutMe != "" {
 		pdf.SetTextColor(31, 31, 31)
 		pdf.SetFont("robotoBold", "", 25)
-		pdf.SetX(250)
-		pdf.SetY(50)
 		pdf.Cell(nil, "About Me")
 
 		pdf.SetFillColor(31, 31, 31)
@@ -363,7 +364,8 @@ func resizeImage(byteImage []byte, widthCondition int, heightCondition int) ([]b
 		tempImage, _, _ = image.Decode(bytes.NewReader(byteImage))
 		imageWidth = tempImage.Bounds().Max.X
 		imageHeight = tempImage.Bounds().Max.Y
-	} else if imageWidth > widthCondition {
+	}
+	if imageWidth > widthCondition {
 		var resizedImage *image.NRGBA
 		resizedImage = imaging.Resize(tempImage, widthCondition, 0, imaging.Lanczos)
 
