@@ -45,6 +45,7 @@ type JobPost struct {
 	Category  string    `json:"category" bson:"category"`
 	Location  string    `json:"location" bson:"location"`
 	Image     string    `json:"image" bson:"image"`
+	Currency  string    `json:"currency" bson:"currency"`
 	Type      string    `json:"type" bson:"type"`
 	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt" bson:"updatedAt"`
