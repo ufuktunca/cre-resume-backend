@@ -58,9 +58,9 @@ func (_mr *MockCVModelInterfaceMockRecorder) GetCVs(arg0 interface{}) *gomock.Ca
 }
 
 // GetCV mocks base method
-func (_m *MockCVModelInterface) GetCV(cvId string) (string, error) {
+func (_m *MockCVModelInterface) GetCV(cvId string) (*models.CV, error) {
 	ret := _m.ctrl.Call(_m, "GetCV", cvId)
-	ret0, _ := ret[0].(string)
+	ret0, _ := ret[0].(*models.CV)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

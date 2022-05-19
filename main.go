@@ -26,8 +26,8 @@ func main() {
 	cvController := cv.NewCVController(cvView)
 
 	userController.SetupUserController(app)
-	jobPostController.SetupJobPostController(app)
 	cvController.SetupRouteApp(app)
+	jobPostController.SetupJobPostController(app)
 
 	app.Listen(":8080")
 }

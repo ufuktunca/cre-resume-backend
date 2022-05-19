@@ -164,7 +164,7 @@ func Test_GetUsersJobPostsHanlder(t *testing.T) {
 			},
 		}
 
-		req, err := http.NewRequest(fiber.MethodGet, "/user/jobPost/employee", nil)
+		req, err := http.NewRequest(fiber.MethodGet, "/jobPost/user/employee", nil)
 		assert.Nil(t, err)
 		req.Header.Add("Authorization", *token)
 

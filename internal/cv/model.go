@@ -18,7 +18,7 @@ type CVModel struct {
 type CVModelInterface interface {
 	CreateCV(cvData models.CV) error
 	GetCVs(userID string) (*[]models.CV, error)
-	GetCV(cvId string) (string, error)
+	GetCV(cvId string) (*models.CV, error)
 }
 
 func CreateCVModel(uri string) *CVModel {
@@ -78,7 +78,7 @@ func (cvr *CVModel) GetCVs(userID string) (*[]models.CV, error) {
 	return &CVs, nil
 }
 
-func (cvr *CVModel) GetCV(cvId string) (string, error) {
+func (cvr *CVModel) GetCV(cvId string) (*models.CV, error) {
 	collection := cvr.MongoClient.Database("cre-resume").Collection("CV")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -86,12 +86,12 @@ func (cvr *CVModel) GetCV(cvId string) (string, error) {
 
 	dbResult := collection.FindOne(ctx, bson.M{"id": cvId})
 
-	CVs := models.CV{}
-	err := dbResult.Decode(&CVs)
+	CV := models.CV{}
+	err := dbResult.Decode(&CV)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return CVs.PDFCV, nil
+	return &CV, nil
 }

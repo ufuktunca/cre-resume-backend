@@ -69,12 +69,13 @@ func Test_GetSingleCV(t *testing.T) {
 		CVModel.
 			EXPECT().
 			GetCV("3453453").
-			Return("2342352456jkl4j5", nil)
+			Return(&models.CV{}, nil)
 
 		view := cv.NewCVView(CVModel)
-		cvData, err := view.GetCV("3453453")
+		cvData, cvName, err := view.GetCV("3453453")
 
 		assert.Nil(t, err)
 		assert.NotNil(t, cvData)
+		assert.NotNil(t, cvName)
 	})
 }

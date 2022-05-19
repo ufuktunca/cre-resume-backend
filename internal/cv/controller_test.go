@@ -38,7 +38,7 @@ func Test_CreateCVController(t *testing.T) {
 		reqBody, err := json.Marshal(&cvData)
 		assert.Nil(t, err)
 
-		req, err := http.NewRequest(fiber.MethodPost, "/cv", bytes.NewReader(reqBody))
+		req, err := http.NewRequest(fiber.MethodPost, "/user/cv", bytes.NewReader(reqBody))
 		assert.Nil(t, err)
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Set("Content-Length", strconv.Itoa(len(reqBody)))
@@ -120,7 +120,7 @@ func Test_GetSingleCVHandler(t *testing.T) {
 		mockCVView.
 			EXPECT().
 			GetCV("423423423").
-			Return([]byte(""), nil)
+			Return([]byte(""), "asdasdas", nil)
 
 		resp, _ := app.Test(req)
 

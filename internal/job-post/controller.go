@@ -16,11 +16,11 @@ func NewJobPostController(view JobPostViewInterface) *JobPostController {
 }
 
 func (j *JobPostController) SetupJobPostController(app *fiber.App) {
-	app.Use(auth.VerifyToken)
+	app.Use("/jobPost", auth.VerifyToken)
 	app.Post("/jobPost/:userType", j.CreateJobPost)
 	app.Get("/jobPost/:type", j.GetJobPosts)
 	app.Post("/jobPost/:jobId/apply", j.ApplyJobController)
-	app.Get("/user/jobPost/:type", j.GetUserJobPosts)
+	app.Get("/jobPost/user/:type", j.GetUserJobPosts)
 
 }
 

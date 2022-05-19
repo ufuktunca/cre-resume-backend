@@ -18,8 +18,8 @@ func NewCVController(view CVViewInterface) *CVController {
 }
 
 func (cv *CVController) SetupRouteApp(app *fiber.App) {
-	app.Use(auth.VerifyToken)
-	app.Post("/cv", cv.CreateCV)
+	app.Use("/user", auth.VerifyToken)
+	app.Post("/user/cv", cv.CreateCV)
 	app.Get("/cv/:cvId", cv.GetCV)
 	app.Get("/user/cv", cv.GetCVHandler)
 }
@@ -59,14 +59,18 @@ func (cv *CVController) GetCVHandler(c *fiber.Ctx) error {
 
 func (cv *CVController) GetCV(c *fiber.Ctx) error {
 	cvID := c.Params("cvId", "")
+	download := c.Query("download")
 
-	pdf, err := cv.View.GetCV(cvID)
+	pdf, pdfName, err := cv.View.GetCV(cvID)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
 	}
 
 	c.Set("Content-Type", "application/pdf")
+	if download == "true" {
+		c.Set("Content-Disposition", "attachment; filename="+pdfName+".pdf")
+	}
 	c.Write(pdf)
 
 	return nil

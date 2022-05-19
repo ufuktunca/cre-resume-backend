@@ -249,11 +249,12 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 			pdf.SetX(250)
 			pdf.SetY(pdf.GetY() + 15)
 
+			longestText := findLongerText(education.StartDate, education.EndDate, &pdf)
 			pdf.SetFont("robotoBold", "", 17)
 			pdf.Cell(nil, education.StartDate)
 
 			pdf.SetTextColor(31, 31, 31)
-			pdf.SetX(pdf.GetX() + 15)
+			pdf.SetX(250 + longestText + 15)
 			universityStartX := pdf.GetX()
 			pdf.Cell(nil, education.School)
 
@@ -335,11 +336,6 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 		}
 	}
 
-	err = pdf.WritePdf("./test.pdf")
-	if err != nil {
-		return nil, err
-	}
-
 	return pdf.GetBytesPdf(), nil
 }
 
@@ -384,4 +380,15 @@ func resizeImage(byteImage []byte, widthCondition int, heightCondition int) ([]b
 	}
 
 	return byteImage, imageWidth, imageHeight
+}
+
+func findLongerText(text1, text2 string, pdf *gopdf.GoPdf) float64 {
+	text1Length, _ := pdf.MeasureTextWidth(text1)
+	text2Length, _ := pdf.MeasureTextWidth(text2)
+
+	if text1Length > text2Length {
+		return text1Length
+	}
+
+	return text2Length
 }

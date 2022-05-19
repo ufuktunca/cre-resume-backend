@@ -19,6 +19,7 @@ func VerifyToken(c *fiber.Ctx) error {
 	})
 
 	if err != nil || !tkns.Valid {
+
 		c.Status(fiber.StatusUnauthorized)
 		return nil
 	}
