@@ -99,3 +99,31 @@ func Test_GetCVs(t *testing.T) {
 		assert.NotNil(t, actualResult)
 	})
 }
+
+func Test_GetSingleCVHandler(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockCVView := mocks.NewMockCVViewInterface(controller)
+
+	t.Run("GivenUserWhenSentGetCVRequestThenShouldReturnUsersCV", func(t *testing.T) {
+		app := fiber.New()
+
+		token, err := auth.CreateToken("234234234")
+		assert.Nil(t, err)
+
+		req, err := http.NewRequest(fiber.MethodGet, "/cv/423423423", nil)
+		assert.Nil(t, err)
+		req.Header.Add("Authorization", *token)
+
+		cvController := cv.NewCVController(mockCVView)
+		cvController.SetupRouteApp(app)
+
+		mockCVView.
+			EXPECT().
+			GetCV("423423423").
+			Return([]byte(""), nil)
+
+		resp, _ := app.Test(req)
+
+		assert.Equal(t, 200, resp.StatusCode)
+	})
+}

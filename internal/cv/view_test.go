@@ -60,3 +60,21 @@ func Test_GetCV(t *testing.T) {
 		assert.NotNil(t, cvData)
 	})
 }
+
+func Test_GetSingleCV(t *testing.T) {
+	t.Run("Given user When sent get CV request Then should return user's CV", func(t *testing.T) {
+		controler := gomock.NewController(t)
+		CVModel := mocks.NewMockCVModelInterface(controler)
+
+		CVModel.
+			EXPECT().
+			GetCV("3453453").
+			Return("2342352456jkl4j5", nil)
+
+		view := cv.NewCVView(CVModel)
+		cvData, err := view.GetCV("3453453")
+
+		assert.Nil(t, err)
+		assert.NotNil(t, cvData)
+	})
+}

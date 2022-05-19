@@ -13,6 +13,7 @@ type CVView struct {
 type CVViewInterface interface {
 	CreateCV(cvData *models.CV, userID string) error
 	GetCVs(userID string) (*[]models.CV, error)
+	GetCV(cvID string) ([]byte, error)
 }
 
 func NewCVView(cvModel CVModelInterface) *CVView {
@@ -28,9 +29,25 @@ func (cs *CVView) CreateCV(cvData *models.CV, userID string) error {
 	}
 	base64Data := base64.StdEncoding.EncodeToString(byteData)
 	cvData.PDFCV = base64Data
+	cvData.OwnerID = userID
+	cvData.ID = helpers.GenerateUUID(8)
 	return cs.Model.CreateCV(*cvData)
 }
 
 func (cs *CVView) GetCVs(userID string) (*[]models.CV, error) {
 	return cs.Model.GetCVs(userID)
+}
+
+func (cs *CVView) GetCV(cvID string) ([]byte, error) {
+	cvPdf, err := cs.Model.GetCV(cvID)
+	if err != nil {
+		return nil, err
+	}
+
+	pdf, err := base64.StdEncoding.DecodeString(cvPdf)
+	if err != nil {
+		return nil, err
+	}
+
+	return pdf, nil
 }

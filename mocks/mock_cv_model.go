@@ -56,3 +56,16 @@ func (_m *MockCVModelInterface) GetCVs(userID string) (*[]models.CV, error) {
 func (_mr *MockCVModelInterfaceMockRecorder) GetCVs(arg0 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetCVs", reflect.TypeOf((*MockCVModelInterface)(nil).GetCVs), arg0)
 }
+
+// GetCV mocks base method
+func (_m *MockCVModelInterface) GetCV(cvId string) (string, error) {
+	ret := _m.ctrl.Call(_m, "GetCV", cvId)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetCV indicates an expected call of GetCV
+func (_mr *MockCVModelInterfaceMockRecorder) GetCV(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetCV", reflect.TypeOf((*MockCVModelInterface)(nil).GetCV), arg0)
+}
