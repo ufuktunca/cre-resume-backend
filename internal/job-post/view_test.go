@@ -4,6 +4,7 @@ import (
 	jobPost "cre-resume-backend/internal/job-post"
 	"cre-resume-backend/internal/models"
 	"cre-resume-backend/mocks"
+	"errors"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -92,6 +93,11 @@ func Test_ApplyJob(t *testing.T) {
 		applyJobDTO := models.ApplyJobPostDTO{
 			CVID: "askdjkas",
 		}
+
+		mockJobPostModel.
+			EXPECT().
+			GetJobPostsWithUserID("test@gmail.com", "23874289374").
+			Return(nil, errors.New("error"))
 
 		mockJobPostModel.
 			EXPECT().

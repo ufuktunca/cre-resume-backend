@@ -4,6 +4,7 @@ import (
 	"cre-resume-backend/internal/helpers"
 	"cre-resume-backend/internal/models"
 	"cre-resume-backend/internal/user"
+	"errors"
 	"time"
 )
 
@@ -46,6 +47,11 @@ func (s *JobPostView) GetJobPosts(jobPostType, category, from, to, sort string) 
 }
 
 func (s *JobPostView) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, jobID string) error {
+	_, err := s.Model.GetJobApplyWithUserIDAndJobID(userID, jobID)
+	if err == nil {
+		return errors.New("you cannot apply to same job")
+	}
+
 	jobPost, err := s.Model.GetJobPostByID(jobID)
 	if err != nil {
 		return err
