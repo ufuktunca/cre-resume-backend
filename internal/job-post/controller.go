@@ -27,6 +27,8 @@ func (j *JobPostController) SetupJobPostController(app *fiber.App) {
 func (j *JobPostController) CreateJobPost(c *fiber.Ctx) error {
 	jobPost := &models.JobPost{}
 	userID := c.Get("user-id", "")
+	jobPostType := c.Params("userType", "")
+
 	if userID == "" {
 		c.Status(fiber.StatusInternalServerError)
 		return nil
@@ -38,6 +40,7 @@ func (j *JobPostController) CreateJobPost(c *fiber.Ctx) error {
 		return nil
 	}
 
+	jobPost.Type = jobPostType
 	jobPostData, err := j.View.CreateJobPost(jobPost, userID)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)

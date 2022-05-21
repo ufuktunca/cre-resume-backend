@@ -15,6 +15,7 @@ type User struct {
 	Password   string `json:"password" bson:"password"`
 	Type       string `json:"type" bson:"type"`
 	Activation bool   `json:"activation" bson:"activation"`
+	BirthDate  string `json:"birthDate" bson:"birthDate"`
 }
 
 type Login struct {
