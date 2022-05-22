@@ -82,3 +82,16 @@ func (_m *MockJobPostViewInterface) GetUserJobPosts(userEmail string, postType s
 func (_mr *MockJobPostViewInterfaceMockRecorder) GetUserJobPosts(arg0, arg1 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetUserJobPosts", reflect.TypeOf((*MockJobPostViewInterface)(nil).GetUserJobPosts), arg0, arg1)
 }
+
+// GetUserAppliedJobs mocks base method
+func (_m *MockJobPostViewInterface) GetUserAppliedJobs(userId string) (*[]models.AppliedJobs, error) {
+	ret := _m.ctrl.Call(_m, "GetUserAppliedJobs", userId)
+	ret0, _ := ret[0].(*[]models.AppliedJobs)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserAppliedJobs indicates an expected call of GetUserAppliedJobs
+func (_mr *MockJobPostViewInterfaceMockRecorder) GetUserAppliedJobs(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetUserAppliedJobs", reflect.TypeOf((*MockJobPostViewInterface)(nil).GetUserAppliedJobs), arg0)
+}

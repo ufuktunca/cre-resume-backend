@@ -3,6 +3,7 @@ package cv
 import (
 	"cre-resume-backend/internal/auth"
 	"cre-resume-backend/internal/models"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -62,6 +63,7 @@ func (cv *CVController) GetCV(c *fiber.Ctx) error {
 	download := c.Query("download")
 
 	pdf, pdfName, err := cv.View.GetCV(cvID)
+	fmt.Println(err)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return nil

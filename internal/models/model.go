@@ -48,6 +48,7 @@ type JobPost struct {
 	Image     string    `json:"image" bson:"image"`
 	Currency  string    `json:"currency" bson:"currency"`
 	Type      string    `json:"type" bson:"type"`
+	CVID      string    `json:"cvId" bson:"cvId"`
 	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt" bson:"updatedAt"`
 	DeletedAt time.Time `json:"deletedAt" bson:"deletedAt"`
@@ -104,6 +105,11 @@ type ApplyJobPost struct {
 
 type ApplyJobPostDTO struct {
 	CVID string `json:"cvId" bson:"cvId"`
+}
+
+type AppliedJobs struct {
+	JobPost JobPost      `json:"jobPost"`
+	Apply   ApplyJobPost `json:"apply"`
 }
 
 var RegistirationMailContent = "You have successfully registered to Cre-Resume please click this link for activation.\n "

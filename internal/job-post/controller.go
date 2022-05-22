@@ -17,9 +17,11 @@ func NewJobPostController(view JobPostViewInterface) *JobPostController {
 
 func (j *JobPostController) SetupJobPostController(app *fiber.App) {
 	app.Use("/jobPost", auth.VerifyToken)
+	app.Use("/user", auth.VerifyToken)
 	app.Post("/jobPost/:userType", j.CreateJobPost)
 	app.Get("/jobPost/:type", j.GetJobPosts)
 	app.Post("/jobPost/:jobId/apply", j.ApplyJobController)
+	app.Get("/user/jobPost/apply", j.GetAppliedJobs)
 	app.Get("/jobPost/user/:type", j.GetUserJobPosts)
 
 }
@@ -100,5 +102,18 @@ func (j *JobPostController) GetUserJobPosts(c *fiber.Ctx) error {
 	}
 
 	c.JSON(jobPosts)
+	return nil
+}
+
+func (j *JobPostController) GetAppliedJobs(c *fiber.Ctx) error {
+	userID := c.Get("user-id", "")
+
+	appliedJobs, err := j.View.GetUserAppliedJobs(userID)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return err
+	}
+
+	c.JSON(appliedJobs)
 	return nil
 }
