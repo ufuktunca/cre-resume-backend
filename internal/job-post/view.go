@@ -19,6 +19,7 @@ type JobPostViewInterface interface {
 	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, jobID string) error
 	GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error)
 	GetUserAppliedJobs(userId string) (*[]models.JobPost, error)
+	GetJobApplies(jobId string) (*[]models.ApplyJobPost, error)
 }
 
 func NewJobPostView(model JobPostModelInterface, userModel user.UserModelInterface) *JobPostView {
@@ -96,4 +97,9 @@ func (s *JobPostView) GetUserAppliedJobs(userId string) (*[]models.JobPost, erro
 	}
 
 	return &jobs, nil
+}
+
+func (s *JobPostView) GetJobApplies(jobId string) (*[]models.ApplyJobPost, error) {
+
+	return s.Model.GetJobApplies(jobId)
 }

@@ -171,3 +171,20 @@ func Test_GetUserAppliedJobPosts(t *testing.T) {
 		assert.NotNil(t, jobPostData2)
 	})
 }
+
+func Test_GetJobApplies(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockJobPostModel := mocks.NewMockJobPostModelInterface(controller)
+	mockUserModel := mocks.NewMockUserModelInterface(controller)
+
+	t.Run("Given User When gets job applies then should return job applies", func(t *testing.T) {
+
+		mockJobPostModel.EXPECT().GetJobApplies("345346346").Return(&[]models.ApplyJobPost{}, nil)
+
+		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel)
+		jobPostData2, err := jobPostView.GetJobApplies("345346346")
+
+		assert.Nil(t, err)
+		assert.NotNil(t, jobPostData2)
+	})
+}

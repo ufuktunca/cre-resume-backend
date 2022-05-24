@@ -25,6 +25,7 @@ type JobPostModelInterface interface {
 	GetJobApplyWithUserIDAndJobID(userId string, jobID string) (*models.ApplyJobPost, error)
 	GetUserApplies(userId string) ([]models.ApplyJobPost, error)
 	GetUserJobPosts(userId string) ([]models.JobPost, error)
+	GetJobApplies(jobId string) (*[]models.ApplyJobPost, error)
 }
 
 func NewJobModel(uri string) *JobPostModel {
@@ -187,6 +188,30 @@ func (r *JobPostModel) GetUserJobPosts(userId string) ([]models.JobPost, error) 
 		return nil, err
 	}
 	return jobPosts, nil
+}
+
+func (r *JobPostModel) GetJobApplies(jobId string) (*[]models.ApplyJobPost, error) {
+	collection := r.MongoClient.Database("cre-resume").Collection("apply-jobPost")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	cur, err := collection.Find(ctx, bson.M{"jobPostId": jobId})
+
+	applies := []models.ApplyJobPost{}
+	for cur.Next(ctx) {
+		var apply models.ApplyJobPost
+		err := cur.Decode(&apply)
+		if err != nil {
+			log.Fatal(err)
+		}
+		applies = append(applies, apply)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+	return &applies, nil
 }
 
 func (r *JobPostModel) GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error) {

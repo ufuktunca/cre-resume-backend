@@ -23,6 +23,7 @@ func (j *JobPostController) SetupJobPostController(app *fiber.App) {
 	app.Post("/jobPost/:jobId/apply", j.ApplyJobController)
 	app.Get("/user/jobPost/apply", j.GetAppliedJobs)
 	app.Get("/jobPost/user/:type", j.GetUserJobPosts)
+	app.Get("/jobs/:jobId/apply", j.GetJobApplies)
 
 }
 
@@ -115,5 +116,18 @@ func (j *JobPostController) GetAppliedJobs(c *fiber.Ctx) error {
 	}
 
 	c.JSON(appliedJobs)
+	return nil
+}
+
+func (j *JobPostController) GetJobApplies(c *fiber.Ctx) error {
+	jobId := c.Params("jobId", "")
+
+	jobApplies, err := j.View.GetJobApplies(jobId)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return err
+	}
+
+	c.JSON(jobApplies)
 	return nil
 }
