@@ -20,11 +20,10 @@ func SendMail(registeredUser, message string) error {
 	m.SetHeader("Subject", "Register verificiation")
 
 	m.SetBody("text/plain", message)
-	d := gomail.NewDialer("smtp.gmail.com", 465, mail, "vqeqebnvtfckvmnm")
+	d := gomail.NewDialer("smtp.yandex.com", 465, mail, "vqeqebnvtfckvmnm")
 
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	err := d.DialAndSend(m)
-
 	return err
 }
