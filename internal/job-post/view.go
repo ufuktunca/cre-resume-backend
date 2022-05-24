@@ -18,7 +18,7 @@ type JobPostViewInterface interface {
 	GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error)
 	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, jobID string) error
 	GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error)
-	GetUserAppliedJobs(userId string) (*[]models.AppliedJobs, error)
+	GetUserAppliedJobs(userId string) (*[]models.JobPost, error)
 }
 
 func NewJobPostView(model JobPostModelInterface, userModel user.UserModelInterface) *JobPostView {
@@ -78,22 +78,22 @@ func (s *JobPostView) GetUserJobPosts(userID string, postType string) (*[]models
 	return s.Model.GetJobPostsWithUserID(userID, postType)
 }
 
-func (s *JobPostView) GetUserAppliedJobs(userId string) (*[]models.AppliedJobs, error) {
+func (s *JobPostView) GetUserAppliedJobs(userId string) (*[]models.JobPost, error) {
 
 	applies, err := s.Model.GetUserApplies(userId)
 	if err != nil {
 		return nil, err
 	}
 
-	jobs, err := s.Model.GetUserJobPosts(userId)
-	if err != nil {
-		return nil, err
+	jobs := []models.JobPost{}
+	for _, apply := range applies {
+		job, err := s.Model.GetJobPostByID(apply.JobPostID)
+		if err != nil {
+			return nil, err
+		}
+		job.CVID = apply.CVID
+		jobs = append(jobs, *job)
 	}
 
-	appliedJobs := []models.AppliedJobs{}
-	for index, apply := range applies {
-		appliedJobs = append(appliedJobs, models.AppliedJobs{JobPost: jobs[index], Apply: apply})
-	}
-
-	return &appliedJobs, nil
+	return &jobs, nil
 }

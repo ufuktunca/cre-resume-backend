@@ -108,8 +108,8 @@ type ApplyJobPostDTO struct {
 }
 
 type AppliedJobs struct {
-	JobPost JobPost      `json:"jobPost"`
-	Apply   ApplyJobPost `json:"apply"`
+	JobPost []JobPost      `json:"jobPosts"`
+	Apply   []ApplyJobPost `json:"applies"`
 }
 
 var RegistirationMailContent = "You have successfully registered to Cre-Resume please click this link for activation.\n "

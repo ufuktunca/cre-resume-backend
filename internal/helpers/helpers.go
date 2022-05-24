@@ -29,7 +29,7 @@ func GenerateUUID(length int) string {
 	return uuid[0:length]
 }
 
-func CreateCV(cvData *models.CV) ([]byte, error) {
+func CreateCV(cvData *models.CV, user *models.User) ([]byte, error) {
 	pdf := gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{PageSize: gopdf.Rect{W: 840, H: 1188}})
 
@@ -119,6 +119,16 @@ func CreateCV(cvData *models.CV) ([]byte, error) {
 	pdf.SetY(pdf.GetY() + 15)
 	pdf.SetX(20)
 	pdf.Cell(nil, cvData.PhoneNumber)
+
+	pdf.SetFont("robotoBold", "", 14)
+	pdf.SetX(20)
+	pdf.SetY(pdf.GetY() + 20)
+	pdf.Cell(nil, "Birth Date")
+
+	pdf.SetFont("wts11", "", 10)
+	pdf.SetY(pdf.GetY() + 15)
+	pdf.SetX(20)
+	pdf.Cell(nil, user.BirthDate)
 
 	pdf.SetFont("robotoBold", "", 14)
 	pdf.SetX(20)

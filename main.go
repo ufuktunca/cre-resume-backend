@@ -22,7 +22,7 @@ func main() {
 	jobPostController := jobPost.NewJobPostController(jobPostView)
 
 	cvModel := cv.CreateCVModel("mongodb://localhost:27017")
-	cvView := cv.NewCVView(cvModel)
+	cvView := cv.NewCVView(cvModel, userModel)
 	cvController := cv.NewCVController(cvView)
 
 	userController.SetupUserController(app)

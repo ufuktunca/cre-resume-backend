@@ -163,11 +163,6 @@ func Test_GetUserAppliedJobPosts(t *testing.T) {
 			GetUserApplies("test@gmail.com").
 			Return([]models.ApplyJobPost{}, nil)
 
-		mockJobPostModel.
-			EXPECT().
-			GetUserJobPosts("test@gmail.com").
-			Return([]models.JobPost{}, nil)
-
 		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel)
 
 		jobPostData2, err := jobPostView.GetUserAppliedJobs("test@gmail.com")

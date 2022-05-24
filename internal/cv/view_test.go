@@ -53,7 +53,7 @@ func Test_GetCV(t *testing.T) {
 			GetCVs("3453453").
 			Return(CVs, nil)
 
-		view := cv.NewCVView(CVModel)
+		view := cv.NewCVView(CVModel, nil)
 		cvData, err := view.GetCVs("3453453")
 
 		assert.Nil(t, err)
@@ -71,7 +71,7 @@ func Test_GetSingleCV(t *testing.T) {
 			GetCV("3453453").
 			Return(&models.CV{}, nil)
 
-		view := cv.NewCVView(CVModel)
+		view := cv.NewCVView(CVModel, nil)
 		cvData, cvName, err := view.GetCV("3453453")
 
 		assert.Nil(t, err)

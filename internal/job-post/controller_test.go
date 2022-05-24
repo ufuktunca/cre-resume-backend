@@ -208,7 +208,7 @@ func Test_GetUsersAppliedJobPosts(t *testing.T) {
 		mockJobPostView.
 			EXPECT().
 			GetUserAppliedJobs("234234234").
-			Return(&[]models.AppliedJobs{}, nil)
+			Return(&[]models.JobPost{}, nil)
 
 		resp, _ := app.Test(req)
 		assert.Nil(t, err)
