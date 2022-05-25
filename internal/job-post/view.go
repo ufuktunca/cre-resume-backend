@@ -1,6 +1,7 @@
 package jobPost
 
 import (
+	"cre-resume-backend/internal/cv"
 	"cre-resume-backend/internal/helpers"
 	"cre-resume-backend/internal/models"
 	"cre-resume-backend/internal/user"
@@ -11,6 +12,7 @@ import (
 type JobPostView struct {
 	Model     JobPostModelInterface
 	UserModel user.UserModelInterface
+	CVModel   cv.CVModelInterface
 }
 
 type JobPostViewInterface interface {
@@ -19,13 +21,14 @@ type JobPostViewInterface interface {
 	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, jobID string) error
 	GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error)
 	GetUserAppliedJobs(userId string) (*[]models.JobPost, error)
-	GetJobApplies(jobId string) (*[]models.ApplyJobPost, error)
+	GetJobApplies(jobId string) ([]models.CV, error)
 }
 
-func NewJobPostView(model JobPostModelInterface, userModel user.UserModelInterface) *JobPostView {
+func NewJobPostView(model JobPostModelInterface, userModel user.UserModelInterface, cvModel cv.CVModelInterface) *JobPostView {
 	return &JobPostView{
 		Model:     model,
 		UserModel: userModel,
+		CVModel:   cvModel,
 	}
 }
 
@@ -99,7 +102,21 @@ func (s *JobPostView) GetUserAppliedJobs(userId string) (*[]models.JobPost, erro
 	return &jobs, nil
 }
 
-func (s *JobPostView) GetJobApplies(jobId string) (*[]models.ApplyJobPost, error) {
+func (s *JobPostView) GetJobApplies(jobId string) ([]models.CV, error) {
 
-	return s.Model.GetJobApplies(jobId)
+	applies, err := s.Model.GetJobApplies(jobId)
+	if err != nil {
+		return nil, err
+	}
+
+	cvs := []models.CV{}
+	for _, apply := range *applies {
+		cv, err := s.CVModel.GetCV(apply.CVID)
+		if err != nil {
+			return nil, err
+		}
+		cvs = append(cvs, *cv)
+	}
+
+	return cvs, nil
 }

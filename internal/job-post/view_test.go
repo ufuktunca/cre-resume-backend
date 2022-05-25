@@ -37,7 +37,7 @@ func Test_CreateJobPost(t *testing.T) {
 			CreateJobPost(gomock.Any()).
 			Return(nil)
 
-		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel)
+		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
 		jobPostData2, err := jobPostView.CreateJobPost(&jobPostData, "test@gmail.com")
 
 		assert.NotNil(t, jobPostData2)
@@ -69,7 +69,7 @@ func Test_GetJobs(t *testing.T) {
 			GetJobPosts("employee", "Developer", "3000", "5000", "salary").
 			Return(expectedResult, nil)
 
-		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel)
+		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
 
 		result, err := jobPostView.GetJobPosts("employee", "Developer", "3000", "5000", "salary")
 
@@ -142,7 +142,7 @@ func Test_GetUserJobPosts(t *testing.T) {
 			GetJobPostsWithUserID("test@gmail.com", "employee").
 			Return(&jobPostData, nil)
 
-		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel)
+		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
 
 		jobPostData2, err := jobPostView.GetUserJobPosts("test@gmail.com", "employee")
 
@@ -163,7 +163,7 @@ func Test_GetUserAppliedJobPosts(t *testing.T) {
 			GetUserApplies("test@gmail.com").
 			Return([]models.ApplyJobPost{}, nil)
 
-		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel)
+		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
 
 		jobPostData2, err := jobPostView.GetUserAppliedJobs("test@gmail.com")
 
@@ -181,7 +181,7 @@ func Test_GetJobApplies(t *testing.T) {
 
 		mockJobPostModel.EXPECT().GetJobApplies("345346346").Return(&[]models.ApplyJobPost{}, nil)
 
-		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel)
+		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
 		jobPostData2, err := jobPostView.GetJobApplies("345346346")
 
 		assert.Nil(t, err)

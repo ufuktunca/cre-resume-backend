@@ -121,7 +121,6 @@ func (j *JobPostController) GetAppliedJobs(c *fiber.Ctx) error {
 
 func (j *JobPostController) GetJobApplies(c *fiber.Ctx) error {
 	jobId := c.Params("jobId", "")
-
 	jobApplies, err := j.View.GetJobApplies(jobId)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)

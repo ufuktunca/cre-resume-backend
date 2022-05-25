@@ -17,13 +17,13 @@ func main() {
 	userView := user.NewUserView(userModel)
 	userController := user.NewUserController(userView)
 
-	jobPostModel := jobPost.NewJobModel("mongodb://localhost:27017")
-	jobPostView := jobPost.NewJobPostView(jobPostModel, userModel)
-	jobPostController := jobPost.NewJobPostController(jobPostView)
-
 	cvModel := cv.CreateCVModel("mongodb://localhost:27017")
 	cvView := cv.NewCVView(cvModel, userModel)
 	cvController := cv.NewCVController(cvView)
+
+	jobPostModel := jobPost.NewJobModel("mongodb://localhost:27017")
+	jobPostView := jobPost.NewJobPostView(jobPostModel, userModel, cvModel)
+	jobPostController := jobPost.NewJobPostController(jobPostView)
 
 	userController.SetupUserController(app)
 	cvController.SetupRouteApp(app)

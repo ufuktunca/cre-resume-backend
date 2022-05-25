@@ -97,9 +97,9 @@ func (_mr *MockJobPostViewInterfaceMockRecorder) GetUserAppliedJobs(arg0 interfa
 }
 
 // GetJobApplies mocks base method
-func (_m *MockJobPostViewInterface) GetJobApplies(jobId string) (*[]models.ApplyJobPost, error) {
+func (_m *MockJobPostViewInterface) GetJobApplies(jobId string) ([]models.CV, error) {
 	ret := _m.ctrl.Call(_m, "GetJobApplies", jobId)
-	ret0, _ := ret[0].(*[]models.ApplyJobPost)
+	ret0, _ := ret[0].([]models.CV)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
