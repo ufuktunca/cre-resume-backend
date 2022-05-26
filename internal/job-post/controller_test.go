@@ -245,3 +245,32 @@ func Test_GetJobAppliesHandler(t *testing.T) {
 		assert.Equal(t, resp.StatusCode, 200)
 	})
 }
+
+func Test_GetDeleteJobPostHandler(t *testing.T) {
+
+	t.Run("GivenUserWhenSentDeleteJobRequestThenReturnStatusNoContent", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		mockJobPostView := mocks.NewMockJobPostViewInterface(controller)
+		app := fiber.New()
+
+		token, err := auth.CreateToken("234234234")
+		assert.Nil(t, err)
+
+		req, err := http.NewRequest(fiber.MethodDelete, "/jobs/asdasd", nil)
+		assert.Nil(t, err)
+		req.Header.Add("Authorization", *token)
+
+		jobPostController := jobPost.NewJobPostController(mockJobPostView)
+		jobPostController.SetupJobPostController(app)
+
+		mockJobPostView.
+			EXPECT().
+			DeleteJobPost("asdasd").
+			Return(nil)
+
+		resp, _ := app.Test(req)
+		assert.Nil(t, err)
+
+		assert.Equal(t, resp.StatusCode, 204)
+	})
+}

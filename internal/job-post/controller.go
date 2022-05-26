@@ -24,6 +24,7 @@ func (j *JobPostController) SetupJobPostController(app *fiber.App) {
 	app.Get("/user/jobPost/apply", j.GetAppliedJobs)
 	app.Get("/jobPost/user/:type", j.GetUserJobPosts)
 	app.Get("/jobs/:jobId/apply", j.GetJobApplies)
+	app.Delete("/jobs/:jobId", j.DeleteJobPostHandler)
 
 }
 
@@ -128,5 +129,18 @@ func (j *JobPostController) GetJobApplies(c *fiber.Ctx) error {
 	}
 
 	c.JSON(jobApplies)
+	return nil
+}
+
+func (j *JobPostController) DeleteJobPostHandler(c *fiber.Ctx) error {
+	jobId := c.Params("jobId", "")
+
+	err := j.View.DeleteJobPost(jobId)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
+	c.Status(fiber.StatusNoContent)
 	return nil
 }

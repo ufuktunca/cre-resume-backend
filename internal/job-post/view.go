@@ -22,6 +22,7 @@ type JobPostViewInterface interface {
 	GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error)
 	GetUserAppliedJobs(userId string) (*[]models.JobPost, error)
 	GetJobApplies(jobId string) ([]models.CV, error)
+	DeleteJobPost(jobId string) error
 }
 
 func NewJobPostView(model JobPostModelInterface, userModel user.UserModelInterface, cvModel cv.CVModelInterface) *JobPostView {
@@ -119,4 +120,8 @@ func (s *JobPostView) GetJobApplies(jobId string) ([]models.CV, error) {
 	}
 
 	return cvs, nil
+}
+
+func (s *JobPostView) DeleteJobPost(jobId string) error {
+	return s.Model.DeleteJobPost(jobId)
 }

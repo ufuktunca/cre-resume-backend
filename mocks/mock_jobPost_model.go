@@ -146,3 +146,15 @@ func (_m *MockJobPostModelInterface) GetJobApplies(jobId string) (*[]models.Appl
 func (_mr *MockJobPostModelInterfaceMockRecorder) GetJobApplies(arg0 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetJobApplies", reflect.TypeOf((*MockJobPostModelInterface)(nil).GetJobApplies), arg0)
 }
+
+// DeleteJobPost mocks base method
+func (_m *MockJobPostModelInterface) DeleteJobPost(jobId string) error {
+	ret := _m.ctrl.Call(_m, "DeleteJobPost", jobId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteJobPost indicates an expected call of DeleteJobPost
+func (_mr *MockJobPostModelInterfaceMockRecorder) DeleteJobPost(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "DeleteJobPost", reflect.TypeOf((*MockJobPostModelInterface)(nil).DeleteJobPost), arg0)
+}

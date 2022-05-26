@@ -188,3 +188,22 @@ func Test_GetJobApplies(t *testing.T) {
 		assert.NotNil(t, jobPostData2)
 	})
 }
+
+func Test_DeleteJobPost(t *testing.T) {
+	controller := gomock.NewController(t)
+	mockJobPostModel := mocks.NewMockJobPostModelInterface(controller)
+	mockUserModel := mocks.NewMockUserModelInterface(controller)
+
+	t.Run("Given User When delete job post then should delete job post", func(t *testing.T) {
+
+		mockJobPostModel.
+			EXPECT().
+			DeleteJobPost("345346346").
+			Return(nil)
+
+		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
+		err := jobPostView.DeleteJobPost("345346346")
+
+		assert.Nil(t, err)
+	})
+}
