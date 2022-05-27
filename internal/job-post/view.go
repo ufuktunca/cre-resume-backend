@@ -6,6 +6,7 @@ import (
 	"cre-resume-backend/internal/models"
 	"cre-resume-backend/internal/user"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -123,5 +124,11 @@ func (s *JobPostView) GetJobApplies(jobId string) ([]models.CV, error) {
 }
 
 func (s *JobPostView) DeleteJobPost(jobId string) error {
-	return s.Model.DeleteJobPost(jobId)
+	_, err := s.Model.GetJobPostByID(jobId)
+	if err != nil {
+		fmt.Println("2", err)
+		return s.Model.DeleteJobPost(jobId, false)
+	}
+	fmt.Println("1")
+	return s.Model.DeleteJobPost(jobId, true)
 }

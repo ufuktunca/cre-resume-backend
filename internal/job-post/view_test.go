@@ -198,7 +198,12 @@ func Test_DeleteJobPost(t *testing.T) {
 
 		mockJobPostModel.
 			EXPECT().
-			DeleteJobPost("345346346").
+			GetJobPostByID("345346346").
+			Return(&models.JobPost{}, nil)
+
+		mockJobPostModel.
+			EXPECT().
+			DeleteJobPost("345346346", true).
 			Return(nil)
 
 		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)

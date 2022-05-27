@@ -49,6 +49,7 @@ type JobPost struct {
 	Currency  string    `json:"currency" bson:"currency"`
 	Type      string    `json:"type" bson:"type"`
 	CVID      string    `json:"cvId" bson:"cvId"`
+	Disabled  bool      `json:"disabled" bson:"disabled"`
 	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt" bson:"updatedAt"`
 	DeletedAt time.Time `json:"deletedAt" bson:"deletedAt"`

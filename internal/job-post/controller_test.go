@@ -234,7 +234,7 @@ func Test_GetJobAppliesHandler(t *testing.T) {
 		mockJobPostView.
 			EXPECT().
 			GetJobApplies("3453452").
-			Return(&[]models.ApplyJobPost{}, nil)
+			Return([]models.CV{}, nil)
 
 		jobPostController := jobPost.NewJobPostController(mockJobPostView)
 		jobPostController.SetupJobPostController(app)

@@ -26,7 +26,7 @@ type JobPostModelInterface interface {
 	GetUserApplies(userId string) ([]models.ApplyJobPost, error)
 	GetUserJobPosts(userId string) ([]models.JobPost, error)
 	GetJobApplies(jobId string) (*[]models.ApplyJobPost, error)
-	DeleteJobPost(jobId string) error
+	DeleteJobPost(jobId string, disabled bool) error
 }
 
 func NewJobModel(uri string) *JobPostModel {
@@ -79,7 +79,7 @@ func (r *JobPostModel) GetJobPostByID(id string) (*models.JobPost, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	dbResult := collection.FindOne(ctx, bson.M{"id": id})
+	dbResult := collection.FindOne(ctx, bson.M{"id": id, "disabled": false})
 
 	if dbResult.Err() != nil {
 		return nil, dbResult.Err()
@@ -215,13 +215,17 @@ func (r *JobPostModel) GetJobApplies(jobId string) (*[]models.ApplyJobPost, erro
 	return &applies, nil
 }
 
-func (r *JobPostModel) DeleteJobPost(jobId string) error {
+func (r *JobPostModel) DeleteJobPost(jobId string, disabled bool) error {
 	collection := r.MongoClient.Database("cre-resume").Collection("jobPosts")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	_, err := collection.DeleteOne(ctx, bson.M{"jobPostId": jobId})
+	_, err := collection.UpdateOne(ctx, bson.M{"id": jobId}, bson.M{
+		"$set": bson.M{
+			"disabled": disabled,
+		},
+	})
 	if err != nil {
 		return err
 	}
@@ -234,7 +238,7 @@ func (r *JobPostModel) GetJobPosts(jobPostType, category, from, to, sort string)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	typeFilter := bson.M{"type": jobPostType}
+	typeFilter := bson.M{"type": jobPostType, "disabled": false}
 	categoryFilter := bson.M{}
 	saleFilter := bson.M{}
 

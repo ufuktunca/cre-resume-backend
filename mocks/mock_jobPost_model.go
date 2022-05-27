@@ -148,13 +148,13 @@ func (_mr *MockJobPostModelInterfaceMockRecorder) GetJobApplies(arg0 interface{}
 }
 
 // DeleteJobPost mocks base method
-func (_m *MockJobPostModelInterface) DeleteJobPost(jobId string) error {
-	ret := _m.ctrl.Call(_m, "DeleteJobPost", jobId)
+func (_m *MockJobPostModelInterface) DeleteJobPost(jobId string, disable bool) error {
+	ret := _m.ctrl.Call(_m, "DeleteJobPost", jobId, disable)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteJobPost indicates an expected call of DeleteJobPost
-func (_mr *MockJobPostModelInterfaceMockRecorder) DeleteJobPost(arg0 interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "DeleteJobPost", reflect.TypeOf((*MockJobPostModelInterface)(nil).DeleteJobPost), arg0)
+func (_mr *MockJobPostModelInterfaceMockRecorder) DeleteJobPost(arg0, arg1 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "DeleteJobPost", reflect.TypeOf((*MockJobPostModelInterface)(nil).DeleteJobPost), arg0, arg1)
 }
