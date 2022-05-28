@@ -96,8 +96,12 @@ func (j *JobPostController) ApplyJobController(c *fiber.Ctx) error {
 func (j *JobPostController) GetUserJobPosts(c *fiber.Ctx) error {
 	postType := c.Params("type")
 	userID := c.Get("user-id", "")
+	category := c.Query("category", "")
+	from := c.Query("from", "")
+	to := c.Query("to", "")
+	sort := c.Query("sort", "")
 
-	jobPosts, err := j.View.GetUserJobPosts(userID, postType)
+	jobPosts, err := j.View.GetUserJobPosts(userID, postType, category, from, to, sort)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return nil

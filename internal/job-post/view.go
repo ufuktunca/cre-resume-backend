@@ -20,7 +20,7 @@ type JobPostViewInterface interface {
 	CreateJobPost(jobPost *models.JobPost, userID string) (*models.JobPost, error)
 	GetJobPosts(jobPostType, category, from, to, sort string) (*[]models.JobPost, error)
 	ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, jobID string) error
-	GetUserJobPosts(userEmail string, postType string) (*[]models.JobPost, error)
+	GetUserJobPosts(userEmail string, postType string, category, from, to, sort string) (*[]models.JobPost, error)
 	GetUserAppliedJobs(userId string) (*[]models.JobPost, error)
 	GetJobApplies(jobId string) ([]models.CV, error)
 	DeleteJobPost(jobId string) error
@@ -75,13 +75,13 @@ func (s *JobPostView) ApplyJobPost(jobPostDTO *models.ApplyJobPostDTO, userID, j
 	return s.Model.CreateApplyJobPost(applyJobPost)
 }
 
-func (s *JobPostView) GetUserJobPosts(userID string, postType string) (*[]models.JobPost, error) {
+func (s *JobPostView) GetUserJobPosts(userID string, postType string, category, from, to, sort string) (*[]models.JobPost, error) {
 	_, err := s.UserModel.GetUserByEmail(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.Model.GetJobPostsWithUserID(userID, postType)
+	return s.Model.GetJobPostsWithUserID(userID, postType, category, from, to, sort)
 }
 
 func (s *JobPostView) GetUserAppliedJobs(userId string) (*[]models.JobPost, error) {

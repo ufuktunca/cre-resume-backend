@@ -83,16 +83,16 @@ func (_mr *MockJobPostModelInterfaceMockRecorder) CreateApplyJobPost(arg0 interf
 }
 
 // GetJobPostsWithUserID mocks base method
-func (_m *MockJobPostModelInterface) GetJobPostsWithUserID(id string, postType string) (*[]models.JobPost, error) {
-	ret := _m.ctrl.Call(_m, "GetJobPostsWithUserID", id, postType)
+func (_m *MockJobPostModelInterface) GetJobPostsWithUserID(id string, postType string, category string, from string, to string, sort string) (*[]models.JobPost, error) {
+	ret := _m.ctrl.Call(_m, "GetJobPostsWithUserID", id, postType, category, from, to, sort)
 	ret0, _ := ret[0].(*[]models.JobPost)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetJobPostsWithUserID indicates an expected call of GetJobPostsWithUserID
-func (_mr *MockJobPostModelInterfaceMockRecorder) GetJobPostsWithUserID(arg0, arg1 interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetJobPostsWithUserID", reflect.TypeOf((*MockJobPostModelInterface)(nil).GetJobPostsWithUserID), arg0, arg1)
+func (_mr *MockJobPostModelInterfaceMockRecorder) GetJobPostsWithUserID(arg0, arg1, arg2, arg3, arg4, arg5 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "GetJobPostsWithUserID", reflect.TypeOf((*MockJobPostModelInterface)(nil).GetJobPostsWithUserID), arg0, arg1, arg2, arg3, arg4, arg5)
 }
 
 // GetJobApplyWithUserIDAndJobID mocks base method
@@ -148,8 +148,8 @@ func (_mr *MockJobPostModelInterfaceMockRecorder) GetJobApplies(arg0 interface{}
 }
 
 // DeleteJobPost mocks base method
-func (_m *MockJobPostModelInterface) DeleteJobPost(jobId string, disable bool) error {
-	ret := _m.ctrl.Call(_m, "DeleteJobPost", jobId, disable)
+func (_m *MockJobPostModelInterface) DeleteJobPost(jobId string, disabled bool) error {
+	ret := _m.ctrl.Call(_m, "DeleteJobPost", jobId, disabled)
 	ret0, _ := ret[0].(error)
 	return ret0
 }

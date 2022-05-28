@@ -173,7 +173,7 @@ func Test_GetUsersJobPostsHanlder(t *testing.T) {
 
 		mockJobPostView.
 			EXPECT().
-			GetUserJobPosts("234234234", "employee").
+			GetUserJobPosts("234234234", "employee", "", "", "", "").
 			Return(expectedResult, nil)
 
 		resp, _ := app.Test(req)

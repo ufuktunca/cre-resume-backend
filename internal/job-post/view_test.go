@@ -139,12 +139,12 @@ func Test_GetUserJobPosts(t *testing.T) {
 
 		mockJobPostModel.
 			EXPECT().
-			GetJobPostsWithUserID("test@gmail.com", "employee").
+			GetJobPostsWithUserID("test@gmail.com", "employee", "", "", "", "").
 			Return(&jobPostData, nil)
 
 		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
 
-		jobPostData2, err := jobPostView.GetUserJobPosts("test@gmail.com", "employee")
+		jobPostData2, err := jobPostView.GetUserJobPosts("test@gmail.com", "employee", "", "", "", "")
 
 		assert.Nil(t, err)
 		assert.NotNil(t, jobPostData2)
