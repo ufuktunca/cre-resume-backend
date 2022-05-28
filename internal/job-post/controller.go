@@ -3,6 +3,7 @@ package jobPost
 import (
 	"cre-resume-backend/internal/auth"
 	"cre-resume-backend/internal/models"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -113,10 +114,11 @@ func (j *JobPostController) GetUserJobPosts(c *fiber.Ctx) error {
 
 func (j *JobPostController) GetAppliedJobs(c *fiber.Ctx) error {
 	userID := c.Get("user-id", "")
-
+	fmt.Println(userID)
 	appliedJobs, err := j.View.GetUserAppliedJobs(userID)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
+		fmt.Println(err)
 		return err
 	}
 
@@ -129,6 +131,7 @@ func (j *JobPostController) GetJobApplies(c *fiber.Ctx) error {
 	jobApplies, err := j.View.GetJobApplies(jobId)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
+		fmt.Println(err)
 		return err
 	}
 

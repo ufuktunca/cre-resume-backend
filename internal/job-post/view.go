@@ -94,8 +94,9 @@ func (s *JobPostView) GetUserAppliedJobs(userId string) (*[]models.JobPost, erro
 	jobs := []models.JobPost{}
 	for _, apply := range applies {
 		job, err := s.Model.GetJobPostByID(apply.JobPostID)
+
 		if err != nil {
-			return nil, err
+			continue
 		}
 		job.CVID = apply.CVID
 		jobs = append(jobs, *job)
