@@ -40,13 +40,17 @@ func (cs *CVView) CreateCV(cvData *models.CV, userID string) error {
 	}
 	base64Data := base64.StdEncoding.EncodeToString(byteData)
 	cvData.PDFCV = base64Data
-	cvData.OwnerID = userID
+	cvData.OwnerID = user.UserID
 	cvData.ID = helpers.GenerateUUID(8)
 	return cs.Model.CreateCV(*cvData)
 }
 
 func (cs *CVView) GetCVs(userID string) (*[]models.CV, error) {
-	return cs.Model.GetCVs(userID)
+	user, err := cs.UserModel.GetUserByEmail(userID)
+	if err != nil {
+		return nil, err
+	}
+	return cs.Model.GetCVs(user.UserID)
 }
 
 func (cs *CVView) GetCV(cvID string) ([]byte, string, error) {

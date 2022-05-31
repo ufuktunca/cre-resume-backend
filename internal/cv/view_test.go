@@ -40,6 +40,7 @@ func Test_GetCV(t *testing.T) {
 	t.Run("Given user When sent get CVs request Then should return user's CVs", func(t *testing.T) {
 		controler := gomock.NewController(t)
 		CVModel := mocks.NewMockCVModelInterface(controler)
+		userModel := mocks.NewMockUserModelInterface(controler)
 
 		CVs := &[]models.CV{
 			{
@@ -48,13 +49,18 @@ func Test_GetCV(t *testing.T) {
 			},
 		}
 
+		userModel.
+			EXPECT().
+			GetUserByEmail("ufuktunca@gmail.com").
+			Return(&models.User{UserID: "3453453"}, nil)
+
 		CVModel.
 			EXPECT().
 			GetCVs("3453453").
 			Return(CVs, nil)
 
-		view := cv.NewCVView(CVModel, nil)
-		cvData, err := view.GetCVs("3453453")
+		view := cv.NewCVView(CVModel, userModel)
+		cvData, err := view.GetCVs("ufuktunca@gmail.com")
 
 		assert.Nil(t, err)
 		assert.NotNil(t, cvData)

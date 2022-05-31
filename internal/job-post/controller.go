@@ -19,13 +19,13 @@ func NewJobPostController(view JobPostViewInterface) *JobPostController {
 func (j *JobPostController) SetupJobPostController(app *fiber.App) {
 	app.Use("/jobPost", auth.VerifyToken)
 	app.Use("/user", auth.VerifyToken)
-	app.Post("/jobPost/:userType", j.CreateJobPost)
-	app.Get("/jobPost/:type", j.GetJobPosts)
-	app.Post("/jobPost/:jobId/apply", j.ApplyJobController)
-	app.Get("/user/jobPost/apply", j.GetAppliedJobs)
-	app.Get("/jobPost/user/:type", j.GetUserJobPosts)
-	app.Get("/jobs/:jobId/apply", j.GetJobApplies)
-	app.Delete("/jobs/:jobId", j.DeleteJobPostHandler)
+	app.Post("/jobPost/:userType", j.CreateJobPost)         //finish
+	app.Get("/jobPost/:type", j.GetJobPosts)                //
+	app.Post("/jobPost/:jobId/apply", j.ApplyJobController) //finish
+	app.Get("/user/jobPost/apply", j.GetAppliedJobs)        //finish
+	app.Get("/jobPost/user/:type", j.GetUserJobPosts)       //
+	app.Get("/jobs/:jobId/apply", j.GetJobApplies)          //
+	app.Delete("/jobs/:jobId", j.DeleteJobPostHandler)      //
 
 }
 
@@ -105,6 +105,7 @@ func (j *JobPostController) GetUserJobPosts(c *fiber.Ctx) error {
 	jobPosts, err := j.View.GetUserJobPosts(userID, postType, category, from, to, sort)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
+		fmt.Println(err)
 		return nil
 	}
 

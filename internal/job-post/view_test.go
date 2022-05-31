@@ -32,6 +32,11 @@ func Test_CreateJobPost(t *testing.T) {
 			Type:     "employer",
 		}
 
+		mockUserModel.
+			EXPECT().
+			GetUserByEmail("test@gmail.com").
+			Return(testUser, nil)
+
 		mockJobPostModel.
 			EXPECT().
 			CreateJobPost(gomock.Any()).
@@ -158,9 +163,14 @@ func Test_GetUserAppliedJobPosts(t *testing.T) {
 
 	t.Run("Given User When gets applied posts then should return applied posts", func(t *testing.T) {
 
+		mockUserModel.
+			EXPECT().
+			GetUserByEmail("test@gmail.com").
+			Return(&models.User{UserID: "asdasd"}, nil)
+
 		mockJobPostModel.
 			EXPECT().
-			GetUserApplies("test@gmail.com").
+			GetUserApplies("asdasd").
 			Return([]models.ApplyJobPost{}, nil)
 
 		jobPostView := jobPost.NewJobPostView(mockJobPostModel, mockUserModel, nil)
