@@ -13,15 +13,15 @@ func main() {
 	app := fiber.New()
 	app.Use(cors.New())
 
-	userModel := user.NewUserModel("mongodb://localhost:27017")
+	userModel := user.NewUserModel("mongodb+srv://dbUser:EMbUEVTOraH7YfpM@cluster0.fg8ftbg.mongodb.net/?retryWrites=true&w=majority")
 	userView := user.NewUserView(userModel)
 	userController := user.NewUserController(userView)
 
-	cvModel := cv.CreateCVModel("mongodb://localhost:27017")
+	cvModel := cv.CreateCVModel("mongodb+srv://dbUser:EMbUEVTOraH7YfpM@cluster0.fg8ftbg.mongodb.net/?retryWrites=true&w=majority")
 	cvView := cv.NewCVView(cvModel, userModel)
 	cvController := cv.NewCVController(cvView)
 
-	jobPostModel := jobPost.NewJobModel("mongodb://localhost:27017")
+	jobPostModel := jobPost.NewJobModel("mongodb+srv://dbUser:EMbUEVTOraH7YfpM@cluster0.fg8ftbg.mongodb.net/?retryWrites=true&w=majority")
 	jobPostView := jobPost.NewJobPostView(jobPostModel, userModel, cvModel)
 	jobPostController := jobPost.NewJobPostController(jobPostView)
 
