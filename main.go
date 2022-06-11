@@ -4,6 +4,7 @@ import (
 	"cre-resume-backend/internal/cv"
 	jobPost "cre-resume-backend/internal/job-post"
 	"cre-resume-backend/internal/user"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -29,5 +30,15 @@ func main() {
 	cvController.SetupRouteApp(app)
 	jobPostController.SetupJobPostController(app)
 
-	app.Listen(":8080")
+	app.Listen(":" + SetPort())
+}
+
+func SetPort() string {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		return "8080"
+	}
+
+	return port
 }
