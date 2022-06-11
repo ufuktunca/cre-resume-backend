@@ -14,15 +14,15 @@ func main() {
 	app := fiber.New()
 	app.Use(cors.New())
 
-	userModel := user.NewUserModel("mongodb+srv://ufukdb:bUERFm3jGISA23w0@test-database.hcbaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+	userModel := user.NewUserModel("mongodb+srv://dbUser:X9ZE1PrfJfBg7T4m@cluster0.fg8ftbg.mongodb.net/?retryWrites=true&w=majority")
 	userView := user.NewUserView(userModel)
 	userController := user.NewUserController(userView)
 
-	cvModel := cv.CreateCVModel("mongodb+srv://ufukdb:bUERFm3jGISA23w0@test-database.hcbaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+	cvModel := cv.CreateCVModel("mongodb+srv://dbUser:X9ZE1PrfJfBg7T4m@cluster0.fg8ftbg.mongodb.net/?retryWrites=true&w=majority")
 	cvView := cv.NewCVView(cvModel, userModel)
 	cvController := cv.NewCVController(cvView)
 
-	jobPostModel := jobPost.NewJobModel("mongodb+srv://ufukdb:bUERFm3jGISA23w0@test-database.hcbaq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+	jobPostModel := jobPost.NewJobModel("mongodb+srv://dbUser:X9ZE1PrfJfBg7T4m@cluster0.fg8ftbg.mongodb.net/?retryWrites=true&w=majority")
 	jobPostView := jobPost.NewJobPostView(jobPostModel, userModel, cvModel)
 	jobPostController := jobPost.NewJobPostController(jobPostView)
 
