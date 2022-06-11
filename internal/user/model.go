@@ -101,13 +101,13 @@ func (r *Respository) Activation(userID string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	filter := bson.M{"userID": userID, "userActivate": false}
+	filter := bson.M{"userID": userID, "activation": false}
 
 	_, err := collection.UpdateOne(ctx,
 		filter,
 		bson.M{
 			"$set": bson.M{
-				"userActivate": true,
+				"activation": true,
 			},
 		},
 	)
