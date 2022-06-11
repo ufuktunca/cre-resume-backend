@@ -49,7 +49,7 @@ func (s *View) Register(register *models.User) error {
 		return err
 	}
 
-	return email.SendMail(register.Email, models.RegistirationMailContent+"localhost:3000/login?userID="+register.UserID)
+	return email.SendMail(register.Email, models.RegistirationMailContent+"https://cre-resume.herokuapp.com/login?userID="+register.UserID)
 }
 
 func (s *View) Login(login *models.Login, loginType string) (*string, error) {
