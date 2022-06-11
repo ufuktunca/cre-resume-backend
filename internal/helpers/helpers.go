@@ -125,7 +125,7 @@ func CreateCV(cvData *models.CV, user *models.User) ([]byte, error) {
 	pdf.SetY(pdf.GetY() + 20)
 	pdf.Cell(nil, "Birth Date")
 
-	pdf.SetFont("wts11", "", 10)
+	pdf.SetFont("wts11", "", 8)
 	pdf.SetY(pdf.GetY() + 15)
 	pdf.SetX(20)
 	pdf.Cell(nil, user.BirthDate)
@@ -146,7 +146,7 @@ func CreateCV(cvData *models.CV, user *models.User) ([]byte, error) {
 		pdf.SetY(pdf.GetY() + 20)
 		pdf.Cell(nil, "Github")
 
-		pdf.SetFont("wts11", "", 10)
+		pdf.SetFont("wts11", "", 8)
 		pdf.SetY(pdf.GetY() + 15)
 		pdf.SetX(20)
 		pdf.Cell(nil, cvData.Github)
@@ -160,7 +160,7 @@ func CreateCV(cvData *models.CV, user *models.User) ([]byte, error) {
 		pdf.SetY(pdf.GetY() + 20)
 		pdf.Cell(nil, "Linkedin")
 
-		pdf.SetFont("wts11", "", 10)
+		pdf.SetFont("wts11", "", 8)
 		pdf.SetY(pdf.GetY() + 15)
 		pdf.SetX(20)
 		pdf.Cell(nil, cvData.Linkedin)
@@ -175,7 +175,7 @@ func CreateCV(cvData *models.CV, user *models.User) ([]byte, error) {
 		pdf.SetY(pdf.GetY() + 20)
 		pdf.Cell(nil, "Other Links")
 
-		pdf.SetFont("wts11", "", 10)
+		pdf.SetFont("wts11", "", 8)
 
 		for _, link := range cvData.OtherSM {
 			pdf.SetY(pdf.GetY() + 15)
